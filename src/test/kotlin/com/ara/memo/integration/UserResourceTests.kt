@@ -1,8 +1,7 @@
 package com.ara.memo.integration
 
 import com.ara.memo.view.user.UserView
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.web.reactive.function.BodyInserters
 
@@ -14,7 +13,7 @@ class UserResourceTests : IntegrationTests("/users") {
 
         assertNotNull(response.id)
         assertEquals(response.username, request.username)
-        assertEquals(response.password, request.password)
+        assertNull(response.password)
     }
 
     fun create(user: UserView) = webClient.post()

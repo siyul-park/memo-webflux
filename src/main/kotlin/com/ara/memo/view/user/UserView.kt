@@ -8,10 +8,10 @@ class UserView(
     @JsonView(UsernameView::class) val username: String,
     @JsonView(PasswordView::class) val password: String
 ) : View() {
+    interface ModifiableView : UsernameView, PasswordView
+    interface PublicView : IdView, UsernameView
+
     interface IdView
     interface UsernameView
     interface PasswordView
-
-    interface CreateRequestView : UsernameView, PasswordView
-    interface CreateResponseView : IdView, UsernameView, PasswordView
 }

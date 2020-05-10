@@ -1,13 +1,12 @@
-package com.ara.memo.database.repository
+package com.ara.memo.database.dao
 
-import com.ara.memo.database.dao.ReactiveDao
 import com.ara.memo.database.entity.Entity
 import org.reactivestreams.Publisher
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Mono
 
-open class ReactiveDaoAdapter<T: Entity<ID>, ID>(
-    private val repository: ReactiveCrudRepository<T, ID>
+open class ReactiveDaoAdapter<R: ReactiveCrudRepository<T, ID>, T: Entity<ID>, ID>(
+    protected val repository: R
 ) : ReactiveDao<T, ID> {
     override fun <S : T> save(entity: S): Mono<S> = repository.save(entity)
 
