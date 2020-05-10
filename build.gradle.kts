@@ -33,9 +33,6 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	testImplementation("io.projectreactor:reactor-test")
-
-	testImplementation("org.projectlombok:lombok:1.18.12")
-	testAnnotationProcessor("org.projectlombok:lombok:1.18.12")
 }
 tasks.withType<Test> {
 	useJUnitPlatform()
