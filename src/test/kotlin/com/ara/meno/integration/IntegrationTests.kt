@@ -12,5 +12,5 @@ abstract class IntegrationTests(private val baseUri: String) {
     @Autowired
     protected lateinit var webClient: WebTestClient
 
-    protected fun linkUri(uri: String) = "${baseUri}${uri}"
+    protected fun linkUri(uri: String = "") = "${baseUri}${uri}"
 }

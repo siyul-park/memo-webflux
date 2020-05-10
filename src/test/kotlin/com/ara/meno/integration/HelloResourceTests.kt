@@ -12,7 +12,7 @@ class HelloResourceTests : IntegrationTests("/hello") {
     }
 
     fun get() = webClient.get()
-        .uri(linkUri(""))
+        .uri(linkUri())
         .exchange()
         .expectStatus().isOk
         .expectBody(String::class.java)
