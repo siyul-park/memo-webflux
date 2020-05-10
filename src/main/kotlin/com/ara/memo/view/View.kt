@@ -1,3 +1,3 @@
 package com.ara.memo.view
 
-interface View
+abstract class View
