@@ -1,4 +1,4 @@
-package com.ara.meno.integration
+package com.ara.memo.integration
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,11 +13,9 @@ abstract class IntegrationTests(private val baseUri: String) {
     @Autowired
     protected lateinit var webClient: WebTestClient
 
-    private val uriCache: HashMap<String, String> = hashMapOf()
-
     protected fun getResponseSpec(method: HttpMethod, uri: String = ""): WebTestClient.ResponseSpec = getRequestHeadersSpec(method, uri).exchange()
 
     protected fun getRequestHeadersSpec(method: HttpMethod, uri: String = ""): WebTestClient.RequestHeadersSpec<*> = webClient.method(method).uri(linkUri())
 
-    protected fun linkUri(uri: String = "") = uriCache.getOrPut(uri) { "${baseUri}${uri}" }
+    protected fun linkUri(uri: String = "") = "${baseUri}${uri}"
 }

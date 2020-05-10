@@ -1,11 +1,11 @@
-package com.ara.meno
+package com.ara.memo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class MenoApplication
+class MemoApplication
 
 fun main(args: Array<String>) {
-	runApplication<MenoApplication>(*args)
+    runApplication<MemoApplication>(*args)
 }

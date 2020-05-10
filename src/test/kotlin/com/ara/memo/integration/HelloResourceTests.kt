@@ -1,4 +1,4 @@
-package com.ara.meno.integration
+package com.ara.memo.integration
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

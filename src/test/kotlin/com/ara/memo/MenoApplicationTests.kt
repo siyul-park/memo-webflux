@@ -1,4 +1,4 @@
-package com.ara.meno
+package com.ara.memo
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

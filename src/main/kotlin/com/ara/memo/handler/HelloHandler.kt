@@ -1,4 +1,4 @@
-package com.ara.meno.handler
+package com.ara.memo.handler
 
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
