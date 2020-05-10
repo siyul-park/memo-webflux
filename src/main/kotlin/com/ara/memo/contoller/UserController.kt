@@ -15,10 +15,10 @@ class UserController(
     @PostMapping
     @JsonView(UserView.CreateResponseView::class)
     private fun create(
-        @JsonView(UserView.CreateRequestView::class)
         @RequestBody
+        @JsonView(UserView.CreateRequestView::class)
         userView: Mono<UserView>
     ) = userView.map(UserViewConverter::toEntity)
-        .flatMap { service.create(it) }
+        .flatMap(service::create)
         .map(UserViewConverter::toView)
 }
