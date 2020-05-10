@@ -7,9 +7,9 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 
 @Component
-class GreetingHandler {
+class HelloHandler {
     fun hello(request: ServerRequest) = ServerResponse
         .ok()
         .contentType(MediaType.TEXT_PLAIN)
-        .body(BodyInserters.fromValue("Hello, Spring!"));
+        .body(BodyInserters.fromValue("Hello, Spring!"))
 }
