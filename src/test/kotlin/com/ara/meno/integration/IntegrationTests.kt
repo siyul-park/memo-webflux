@@ -12,5 +12,7 @@ abstract class IntegrationTests(private val baseUri: String) {
     @Autowired
     protected lateinit var webClient: WebTestClient
 
-    protected fun linkUri(uri: String = "") = "${baseUri}${uri}"
+    private val uriCache: HashMap<String, String> = hashMapOf()
+
+    protected fun linkUri(uri: String = "") = uriCache.getOrPut(uri) { "${baseUri}${uri}" }
 }
