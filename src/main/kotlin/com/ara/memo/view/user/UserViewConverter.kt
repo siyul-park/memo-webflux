@@ -9,6 +9,6 @@ object UserViewConverter : Converter<User, UserView, String> {
     }
 
     override fun toEntity(view: UserView) = with(view) {
-        User(id, username, password)
+        User(id, username!!, password!!)
     }
 }

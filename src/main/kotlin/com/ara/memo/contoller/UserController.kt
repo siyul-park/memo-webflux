@@ -5,6 +5,7 @@ import com.ara.memo.view.user.UserView
 import com.ara.memo.view.user.UserViewConverter
 import com.fasterxml.jackson.annotation.JsonView
 import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
@@ -16,10 +17,11 @@ class UserController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @JsonView(UserView.PublicView::class)
+    @JsonView(UserView.PublicScope::class)
     private fun create(
         @RequestBody
-        @JsonView(UserView.ModifiableView::class)
+        @JsonView(UserView.ModifiableScope::class)
+        @Validated(UserView.ModifiableScope::class)
         userView: Mono<UserView>
     ) = userView.map(UserViewConverter::toEntity)
         .flatMap(service::signUp)
@@ -27,13 +29,13 @@ class UserController(
 
     @GetMapping
     @ResponseBody
-    @JsonView(UserView.PublicView::class)
+    @JsonView(UserView.PublicScope::class)
     private fun getAll() = service.findAll()
         .map(UserViewConverter::toView)
 
     @GetMapping("/{id}")
     @ResponseBody
-    @JsonView(UserView.PublicView::class)
+    @JsonView(UserView.PublicScope::class)
     private fun get(
         @PathVariable id: String
     ) = service.findById(id)
@@ -41,18 +43,23 @@ class UserController(
 
     @PatchMapping("/{id}")
     @ResponseBody
-    @JsonView(UserView.PublicView::class)
+    @JsonView(UserView.PublicScope::class)
     private fun update(
         @PathVariable id: String,
         @RequestBody
-        @JsonView(UserView.ModifiableView::class)
+        @JsonView(UserView.ModifiableScope::class)
         userView: Mono<UserView>
-    ) = userView.map(UserViewConverter::toEntity)
+    ) = userView
         .flatMap { newOne ->
             service.updateById(id) {
-                username = newOne.username
-                password = newOne.password
+                newOne.username?.let { username = newOne.username }
+                newOne.password?.let { password = newOne.password }
             }
         }
         .map(UserViewConverter::toView)
+
+    @DeleteMapping("/{id}")
+    private fun delete(
+        @PathVariable id: String
+    ) = service.deleteByIdWhenExist(id)
 }

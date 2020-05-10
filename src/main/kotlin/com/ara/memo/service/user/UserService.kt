@@ -23,7 +23,17 @@ class UserService(
         .flatMap { update(it, updater) }
 
     fun update(user: User, updater: User.() -> Unit) = Mono.fromCallable { user.apply(updater) }
-        .flatMap(dao::save)
+        .flatMap { dao.save(it) }
+
+    fun deleteByIdWhenExist(id: String) = dao.existsById(id)
+        .flatMap { when (it) {
+            true -> dao.deleteById(id)
+            false -> Mono.error(UserNotExistException)
+        } }
+
+    fun existsById(id: String) = dao.existsById(id)
+
+    fun deleteById(id: String) = dao.deleteById(id)
 
     fun findAll() = dao.findAll()
 
