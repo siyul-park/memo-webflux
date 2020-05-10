@@ -2,6 +2,7 @@ package com.ara.meno.integration
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpMethod
 
 class HelloResourceTests : IntegrationTests("/hello") {
     @Test
@@ -11,9 +12,7 @@ class HelloResourceTests : IntegrationTests("/hello") {
         assertEquals(result.responseBody, "Hello, Spring!")
     }
 
-    fun get() = webClient.get()
-        .uri(linkUri())
-        .exchange()
+    fun get() = getResponseSpec(HttpMethod.GET)
         .expectStatus().isOk
         .expectBody(String::class.java)
         .returnResult()
