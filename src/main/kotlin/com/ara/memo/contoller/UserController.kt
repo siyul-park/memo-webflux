@@ -2,7 +2,8 @@ package com.ara.memo.contoller
 
 import com.ara.memo.service.user.UserService
 import com.ara.memo.view.user.UserView
-import com.ara.memo.view.user.UserViewConverter
+import com.ara.memo.view.user.asUser
+import com.ara.memo.view.user.from
 import com.fasterxml.jackson.annotation.JsonView
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
@@ -23,15 +24,15 @@ class UserController(
         @JsonView(UserView.ModifiableScope::class)
         @Validated(UserView.ModifiableScope::class)
         userView: Mono<UserView>
-    ) = userView.map(UserViewConverter::toEntity)
+    ) = userView.map(UserView::asUser)
         .flatMap(service::signUp)
-        .map(UserViewConverter::toView)
+        .map(UserView::from)
 
     @GetMapping
     @ResponseBody
     @JsonView(UserView.PublicScope::class)
     private fun getAll() = service.findAll()
-        .map(UserViewConverter::toView)
+        .map(UserView::from)
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -39,7 +40,7 @@ class UserController(
     private fun get(
         @PathVariable id: String
     ) = service.findById(id)
-        .map(UserViewConverter::toView)
+        .map(UserView::from)
 
     @PatchMapping("/{id}")
     @ResponseBody
@@ -56,7 +57,7 @@ class UserController(
                 newOne.password?.let { password = newOne.password }
             }
         }
-        .map(UserViewConverter::toView)
+        .map(UserView::from)
 
     @DeleteMapping("/{id}")
     private fun delete(

@@ -1,5 +1,6 @@
 package com.ara.memo.view.user
 
+import com.ara.memo.database.entity.User
 import com.ara.memo.view.View
 import com.fasterxml.jackson.annotation.JsonView
 import javax.validation.constraints.NotNull
@@ -22,4 +23,10 @@ open class UserView(
     interface IdScope
     interface UsernameScope
     interface PasswordScope
+
+    companion object
 }
+
+fun UserView.Companion.from(user: User) = with(user) { UserView(id, username, password) }
+
+fun UserView.asUser() = User(id, username!!, password!!)
