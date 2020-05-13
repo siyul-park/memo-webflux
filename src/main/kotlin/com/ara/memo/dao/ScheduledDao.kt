@@ -6,8 +6,8 @@ import reactor.core.publisher.Mono
 import reactor.core.scheduler.Scheduler
 
 open class ScheduledDao<T: Entity<ID>, ID>(
-    protected val dao: ReactiveDao<T, ID>,
-    protected val scheduler: Scheduler
+    private val dao: ReactiveDao<T, ID>,
+    var scheduler: Scheduler
 ) : ReactiveDao<T, ID> {
     override fun <S : T> save(entity: S): Mono<S> = dao.save(entity).subscribeOn(scheduler)
 

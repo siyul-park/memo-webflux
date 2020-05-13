@@ -5,8 +5,8 @@ import org.reactivestreams.Publisher
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Mono
 
-open class ReactiveDaoAdapter<R: ReactiveCrudRepository<T, ID>, T: Entity<ID>, ID>(
-    protected val repository: R
+class ReactiveDaoAdapter<R: ReactiveCrudRepository<T, ID>, T: Entity<ID>, ID>(
+    private val repository: R
 ) : ReactiveDao<T, ID> {
     override fun <S : T> save(entity: S): Mono<S> = repository.save(entity)
 
