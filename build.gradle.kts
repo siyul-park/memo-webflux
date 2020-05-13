@@ -1,5 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val springBootVersion = "2.2.7.RELEASE"
+val swaggerVersion = "3.0.0-SNAPSHOT"
+val jacksonVersion = "2.10.4"
+
 plugins {
 	id("org.springframework.boot") version "2.2.7.RELEASE"
 	id("io.spring.dependency-management") version "1.0.9.RELEASE"
@@ -13,20 +17,26 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
+	maven(url = "http://oss.jfrog.org/artifactory/oss-snapshot-local/")
 }
-dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-webflux")
-	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${springBootVersion}")
+
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
 	
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+
+	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
+	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+	implementation("io.springfox:springfox-spring-webflux:${swaggerVersion}")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+	testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	testImplementation("io.projectreactor:reactor-test")

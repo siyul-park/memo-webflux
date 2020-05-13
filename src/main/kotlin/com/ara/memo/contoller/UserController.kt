@@ -4,11 +4,14 @@ import com.ara.memo.dto.user.UserRequest
 import com.ara.memo.dto.user.UserView
 import com.ara.memo.service.user.UserService
 import com.fasterxml.jackson.annotation.JsonView
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
+@Api(value = "User Controller")
 @RestController
 @RequestMapping("/users")
 class UserController(
@@ -34,19 +37,19 @@ class UserController(
         = service.findAll()
         .map { UserView.from(it) }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{user-id}")
     @ResponseBody
     @JsonView(UserView.PublicProfile::class)
     private fun get(
-        @PathVariable id: String
+        @PathVariable(name = "user-id") id: String
     ) = service.findById(id)
         .map { UserView.from(it) }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{user-id}")
     @ResponseBody
     @JsonView(UserView.PublicProfile::class)
     private fun update(
-        @PathVariable id: String,
+        @PathVariable(name = "user-id") id: String,
         @RequestBody
         @JsonView(UserRequest.Modify::class)
         @Validated(UserRequest.Modify::class)
@@ -56,8 +59,8 @@ class UserController(
             request.password?.let { password = it }
         }.map { UserView.from(it) }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{user-id}")
     private fun delete(
-        @PathVariable id: String
+        @PathVariable(name = "user-id") id: String
     ) = service.deleteByIdWhenExist(id)
 }
