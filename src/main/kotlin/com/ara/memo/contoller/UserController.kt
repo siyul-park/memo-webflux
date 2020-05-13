@@ -5,7 +5,6 @@ import com.ara.memo.dto.user.UserView
 import com.ara.memo.service.user.UserService
 import com.fasterxml.jackson.annotation.JsonView
 import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -60,6 +59,7 @@ class UserController(
         }.map { UserView.from(it) }
 
     @DeleteMapping("/{user-id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     private fun delete(
         @PathVariable(name = "user-id") id: String
     ) = service.deleteByIdWhenExist(id)
