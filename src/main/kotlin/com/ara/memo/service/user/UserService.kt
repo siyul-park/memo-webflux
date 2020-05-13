@@ -4,6 +4,7 @@ import com.ara.memo.dao.user.UserDao
 import com.ara.memo.entity.User
 import com.ara.memo.exception.UserAlreadyExistException
 import com.ara.memo.exception.UserNotExistException
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
@@ -11,11 +12,11 @@ import reactor.core.publisher.Mono
 class UserService(
     private val dao: UserDao
 ) {
-    fun signUp(user: User): Mono<User> =
-        dao.existsByUsername(user.username)
-            .flatMap { when (it) {
-                true -> Mono.error(UserAlreadyExistException)
-                false -> dao.save(user)
+    fun create(user: User): Mono<User>
+        = dao.save(user)
+            .onErrorMap { when (it) {
+                is DuplicateKeyException -> UserAlreadyExistException
+                else -> it
             } }
 
     fun updateById(id: String, updater: User.() -> Unit) =

@@ -26,7 +26,7 @@ class UserController(
         @Validated(UserRequest.Create::class)
         request: Mono<UserRequest>
     ) = request.map(UserRequest::toEntity)
-        .flatMap(service::signUp)
+        .flatMap(service::create)
         .map { UserView.from(it) }
 
     @GetMapping
