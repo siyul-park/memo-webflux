@@ -13,12 +13,12 @@ import reactor.core.publisher.Mono
 @Api(value = "User Controller")
 @RestController
 @RequestMapping("/users")
+@ResponseBody
 class UserController(
     private val service: UserService
 ) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     @JsonView(UserView.PublicProfile::class)
     private fun create(
         @RequestBody
@@ -30,14 +30,12 @@ class UserController(
         .map { UserView.from(it) }
 
     @GetMapping
-    @ResponseBody
     @JsonView(UserView.PublicProfile::class)
     private fun getAll()
         = service.findAll()
         .map { UserView.from(it) }
 
     @GetMapping("/{user-id}")
-    @ResponseBody
     @JsonView(UserView.PublicProfile::class)
     private fun get(
         @PathVariable(name = "user-id") id: String
@@ -45,7 +43,6 @@ class UserController(
         .map { UserView.from(it) }
 
     @PatchMapping("/{user-id}")
-    @ResponseBody
     @JsonView(UserView.PublicProfile::class)
     private fun update(
         @PathVariable(name = "user-id") id: String,
