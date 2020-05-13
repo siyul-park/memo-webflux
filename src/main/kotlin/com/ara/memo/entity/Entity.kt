@@ -1,4 +1,4 @@
-package com.ara.memo.database.entity
+package com.ara.memo.entity
 
 abstract class Entity<ID> {
     abstract val id: ID?

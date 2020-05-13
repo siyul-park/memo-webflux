@@ -1,6 +1,6 @@
 package com.ara.memo.integration
 
-import com.ara.memo.view.user.UserView
+import com.ara.memo.dto.user.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.web.reactive.function.BodyInserters
@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.BodyInserters
 class UserResourceTests : IntegrationTests("/users") {
     @Test
     fun testGet() {
-        val request = UserView(id = null, username = "test", password = "test")
+        val request = UserView(username = "test", password = "test")
         val response = create(request)
 
         assertNotNull(response.id)

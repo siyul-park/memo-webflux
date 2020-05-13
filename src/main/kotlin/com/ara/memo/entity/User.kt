@@ -1,10 +1,10 @@
-package com.ara.memo.database.entity
+package com.ara.memo.entity
 
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document
 data class User(
-    override val id: String?,
     var username: String,
-    var password: String
+    var password: String,
+    override val id: String? = null
 ): Entity<String>()

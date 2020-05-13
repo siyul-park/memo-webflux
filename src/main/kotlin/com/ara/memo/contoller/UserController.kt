@@ -1,9 +1,8 @@
 package com.ara.memo.contoller
 
+import com.ara.memo.dto.user.UserRequest
+import com.ara.memo.dto.user.UserView
 import com.ara.memo.service.user.UserService
-import com.ara.memo.view.user.UserView
-import com.ara.memo.view.user.asUser
-import com.ara.memo.view.user.from
 import com.fasterxml.jackson.annotation.JsonView
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
@@ -18,46 +17,44 @@ class UserController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @JsonView(UserView.PublicScope::class)
+    @JsonView(UserView.PublicProfile::class)
     private fun create(
         @RequestBody
-        @JsonView(UserView.ModifiableScope::class)
-        @Validated(UserView.ModifiableScope::class)
-        userView: Mono<UserView>
-    ) = userView.map(UserView::asUser)
+        @JsonView(UserRequest.Create::class)
+        @Validated(UserRequest.Create::class)
+        request: Mono<UserRequest>
+    ) = request.map(UserRequest::toEntity)
         .flatMap(service::signUp)
-        .map(UserView::from)
+        .map { UserView.from(it) }
 
     @GetMapping
     @ResponseBody
-    @JsonView(UserView.PublicScope::class)
-    private fun getAll() = service.findAll()
-        .map(UserView::from)
+    @JsonView(UserView.PublicProfile::class)
+    private fun getAll()
+        = service.findAll()
+        .map { UserView.from(it) }
 
     @GetMapping("/{id}")
     @ResponseBody
-    @JsonView(UserView.PublicScope::class)
+    @JsonView(UserView.PublicProfile::class)
     private fun get(
         @PathVariable id: String
     ) = service.findById(id)
-        .map(UserView::from)
+        .map { UserView.from(it) }
 
     @PatchMapping("/{id}")
     @ResponseBody
-    @JsonView(UserView.PublicScope::class)
+    @JsonView(UserView.PublicProfile::class)
     private fun update(
         @PathVariable id: String,
         @RequestBody
-        @JsonView(UserView.ModifiableScope::class)
-        userView: Mono<UserView>
-    ) = userView
-        .flatMap { newOne ->
-            service.updateById(id) {
-                newOne.username?.let { username = newOne.username }
-                newOne.password?.let { password = newOne.password }
-            }
-        }
-        .map(UserView::from)
+        @JsonView(UserRequest.Modify::class)
+        @Validated(UserRequest.Modify::class)
+        request: UserRequest
+    ) = service.updateById(id) {
+            request.username?.let { username = it }
+            request.password?.let { password = it }
+        }.map { UserView.from(it) }
 
     @DeleteMapping("/{id}")
     private fun delete(

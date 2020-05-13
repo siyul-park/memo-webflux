@@ -1,6 +1,6 @@
-package com.ara.memo.database.dao
+package com.ara.memo.dao
 
-import com.ara.memo.database.entity.Entity
+import com.ara.memo.entity.Entity
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Scheduler

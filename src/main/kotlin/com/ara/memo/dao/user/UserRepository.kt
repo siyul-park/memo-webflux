@@ -1,6 +1,6 @@
-package com.ara.memo.database.repository
+package com.ara.memo.dao.user
 
-import com.ara.memo.database.entity.User
+import com.ara.memo.entity.User
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import reactor.core.publisher.Mono
 

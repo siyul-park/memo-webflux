@@ -1,6 +1,6 @@
 package com.ara.memo.exception
 
 import org.springframework.http.HttpStatus
-import org.springframework.web.client.HttpServerErrorException
+import org.springframework.web.server.ResponseStatusException
 
-object UserAlreadyExistException : HttpServerErrorException(HttpStatus.FORBIDDEN, "User is already exist.")
+object UserAlreadyExistException : ResponseStatusException(HttpStatus.FORBIDDEN, "User is already exist.")

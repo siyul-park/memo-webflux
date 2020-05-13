@@ -1,6 +1,6 @@
 package com.ara.memo.handler
 
-import com.ara.memo.view.error.ErrorView
+import com.ara.memo.dto.error.ErrorView
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.autoconfigure.web.ResourceProperties
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler
@@ -37,11 +37,12 @@ class ErrorWebExceptionHandler(
 
     private fun renderErrorResponse(request: ServerRequest): Mono<ServerResponse?> {
         val errorPropertiesMap = getErrorAttributes(request, false)
+        val status = errorPropertiesMap["status"] as Int
 
-        return ServerResponse.status(HttpStatus.BAD_REQUEST)
+        return ServerResponse.status(status)
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(
-                when (isServerError(errorPropertiesMap["status"] as Int)) {
+                when (isServerError(status)) {
                     true -> ErrorView(
                         errorPropertiesMap["error"] as String,
                         errorPropertiesMap["path"] as String,
