@@ -1,10 +1,10 @@
 package com.ara.memo.service.user
 
+import com.ara.memo.dao.exception.DuplicateKeyException
 import com.ara.memo.dao.user.UserDao
 import com.ara.memo.entity.User
 import com.ara.memo.exception.UserAlreadyExistException
 import com.ara.memo.exception.UserNotExistException
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
