@@ -25,7 +25,7 @@ class UserController(
         @JsonView(UserRequest.Create::class)
         @Validated(UserRequest.Create::class)
         request: Mono<UserRequest>
-    ) = request.map(UserRequest::toEntity)
+    ) = request.map(UserRequest::toUser)
         .flatMap(service::create)
         .map { UserView.from(it) }
 

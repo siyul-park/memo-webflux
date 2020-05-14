@@ -1,19 +1,16 @@
 package com.ara.memo.dto.user
 
 import com.ara.memo.entity.User
-import com.ara.memo.dto.View
 import com.fasterxml.jackson.annotation.JsonView
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Null
 
-class UserView(
+data class UserView(
     @JsonView(IdScope::class)
-    id: String? = null,
+    val id: String? = null,
     @JsonView(UsernameScope::class)
-    username: String? = null,
+    val username: String? = null,
     @JsonView(PasswordScope::class)
-    password: String? = null
-) : UserDto(id, username, password), View {
+    val password: String? = null
+) {
     interface PublicProfile : IdScope, UsernameScope
 
     interface IdScope

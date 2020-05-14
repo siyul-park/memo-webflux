@@ -44,14 +44,14 @@ class ErrorWebExceptionHandler(
             .body(BodyInserters.fromValue(
                 when (isServerError(status)) {
                     true -> ErrorView(
-                        errorPropertiesMap["error"] as String,
-                        errorPropertiesMap["path"] as String,
-                        errorPropertiesMap["error"] as String
+                        errorPropertiesMap["error"] as? String,
+                        errorPropertiesMap["path"] as? String,
+                        errorPropertiesMap["error"] as? String
                     )
                     false -> ErrorView(
-                        errorPropertiesMap["name"] as String,
-                        errorPropertiesMap["path"] as String,
-                        errorPropertiesMap["message"] as String
+                        errorPropertiesMap["name"] as? String,
+                        errorPropertiesMap["path"] as? String,
+                        errorPropertiesMap["message"] as? String
                     )
                 }
             ))
