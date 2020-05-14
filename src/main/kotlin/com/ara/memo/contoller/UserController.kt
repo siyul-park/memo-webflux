@@ -55,7 +55,7 @@ class UserController(
             request.password?.let { password = it }
         }.map { UserView.from(it) }
 
-    @DeleteMapping("/userId")
+    @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private fun delete(
         @PathVariable userId: String
