@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val springBootVersion = "2.2.7.RELEASE"
 val swaggerVersion = "3.0.0-SNAPSHOT"
 val jacksonVersion = "2.10.4"
-// val modelMapperVersion = "2.3.7"
 
 plugins {
 	id("org.springframework.boot") version "2.2.7.RELEASE"
@@ -32,8 +31,6 @@ dependencies {
 	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
 	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
 	implementation("io.springfox:springfox-spring-webflux:${swaggerVersion}")
-
-//	implementation("org.modelmapper:modelmapper:${modelMapperVersion}")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

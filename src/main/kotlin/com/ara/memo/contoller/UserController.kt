@@ -35,29 +35,29 @@ class UserController(
         = service.findAll()
         .map { UserView.from(it) }
 
-    @GetMapping("/{user-id}")
+    @GetMapping("/{userId}")
     @JsonView(UserView.PublicProfile::class)
     private fun get(
-        @PathVariable(name = "user-id") id: String
-    ) = service.findById(id)
+        @PathVariable userId: String
+    ) = service.findById(userId)
         .map { UserView.from(it) }
 
-    @PatchMapping("/{user-id}")
+    @PatchMapping("/{userId}")
     @JsonView(UserView.PublicProfile::class)
     private fun update(
-        @PathVariable(name = "user-id") id: String,
+        @PathVariable userId: String,
         @RequestBody
         @JsonView(UserRequest.Modify::class)
         @Validated(UserRequest.Modify::class)
         request: UserRequest
-    ) = service.updateById(id) {
+    ) = service.updateById(userId) {
             request.username?.let { username = it }
             request.password?.let { password = it }
         }.map { UserView.from(it) }
 
-    @DeleteMapping("/{user-id}")
+    @DeleteMapping("/userId")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private fun delete(
-        @PathVariable(name = "user-id") id: String
-    ) = service.deleteByIdWhenExist(id)
+        @PathVariable userId: String
+    ) = service.deleteByIdWhenExist(userId)
 }
