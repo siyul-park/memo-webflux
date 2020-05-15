@@ -1,6 +1,6 @@
 package com.ara.memo.dto.user
 
-import com.ara.memo.entity.User
+import com.ara.memo.entity.user.User
 import com.fasterxml.jackson.annotation.JsonView
 import javax.validation.constraints.NotNull
 

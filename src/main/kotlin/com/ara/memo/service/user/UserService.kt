@@ -1,10 +1,10 @@
 package com.ara.memo.service.user
 
-import com.ara.memo.dao.exception.DuplicateKeyException
 import com.ara.memo.dao.user.UserDao
-import com.ara.memo.entity.User
-import com.ara.memo.exception.UserAlreadyExistException
-import com.ara.memo.exception.UserNotExistException
+import com.ara.memo.dto.user.UserAuthorizeInfo
+import com.ara.memo.entity.user.User
+import com.ara.memo.service.user.exception.UserCantAuthorizeException
+import com.ara.memo.service.user.exception.UserNotExistException
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
@@ -12,28 +12,32 @@ import reactor.core.publisher.Mono
 class UserService(
     private val dao: UserDao
 ) {
+    fun authorize(userAuthorizeInfo: UserAuthorizeInfo)
+        = dao.findByUsername(userAuthorizeInfo.username)
+        .switchIfEmpty(Mono.error(UserCantAuthorizeException))
+        .flatMap { when (it.password == userAuthorizeInfo.password) {
+            true -> Mono.just(it)
+            false -> Mono.error(UserCantAuthorizeException)
+        } }
+
     fun create(user: User): Mono<User>
         = dao.save(user)
-            .onErrorMap { when (it) {
-                is DuplicateKeyException -> UserAlreadyExistException
-                else -> it
-            } }
 
-    fun updateById(id: String, updater: User.() -> Unit) =
-        findById(id)
-            .switchIfEmpty(Mono.error(UserNotExistException))
-            .flatMap { update(it, updater) }
+    fun updateById(id: String, updater: User.() -> Unit)
+        = findById(id)
+        .switchIfEmpty(Mono.error(UserNotExistException))
+        .flatMap { update(it, updater) }
 
-    fun update(user: User, updater: User.() -> Unit) =
-        Mono.fromCallable { user.apply(updater) }
-            .flatMap { dao.save(it) }
+    fun update(user: User, updater: User.() -> Unit)
+        = Mono.fromCallable { user.apply(updater) }
+        .flatMap { dao.save(it) }
 
-    fun deleteByIdWhenExist(id: String) =
-        dao.existsById(id)
-            .flatMap { when (it) {
-                true -> dao.deleteById(id)
-                false -> Mono.error(UserNotExistException)
-            } }
+    fun deleteByIdWhenExist(id: String)
+        = dao.existsById(id)
+        .flatMap { when (it) {
+            true -> dao.deleteById(id)
+            false -> Mono.error(UserNotExistException)
+        } }
 
     fun existsById(id: String) = dao.existsById(id)
 

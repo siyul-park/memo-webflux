@@ -1,5 +1,5 @@
 package com.ara.memo.entity
 
-abstract class Entity<ID> {
-    abstract val id: ID?
+interface Entity<ID> {
+    val id: ID?
 }
