@@ -12,6 +12,7 @@ data class UserRequest(
     @NotNull(groups = [PasswordNotNull::class])
     val password: String? = null
 ) {
+    interface Authorize : UsernameScope, UsernameNotNull, PasswordScope, PasswordNotNull
     interface Create : UsernameScope, UsernameNotNull, PasswordScope, PasswordNotNull
     interface Modify : UsernameScope, PasswordScope
 

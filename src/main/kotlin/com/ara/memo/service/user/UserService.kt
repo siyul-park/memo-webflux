@@ -1,7 +1,6 @@
 package com.ara.memo.service.user
 
 import com.ara.memo.dao.user.UserDao
-import com.ara.memo.dto.user.UserAuthorizeInfo
 import com.ara.memo.entity.user.User
 import com.ara.memo.service.user.exception.UserCantAuthorizeException
 import com.ara.memo.service.user.exception.UserNotExistException
@@ -12,9 +11,8 @@ import reactor.core.publisher.Mono
 class UserService(
     private val dao: UserDao
 ) {
-    fun authorize(userAuthorizeInfo: UserAuthorizeInfo) : Mono<User>
-        = findByUsername(userAuthorizeInfo.username)
-        .flatMap { when (it.password == userAuthorizeInfo.password) {
+    fun authorize(user: User) : Mono<User>
+        = find(user).flatMap { when (it.password == user.password) {
             true -> Mono.just(it)
             false -> Mono.error(UserCantAuthorizeException)
         } }
@@ -42,6 +40,11 @@ class UserService(
     fun deleteById(id: String) = dao.deleteById(id)
 
     fun findAll() = dao.findAll()
+
+    fun find(user: User) = when (user.id) {
+        null -> findByUsername(user.username)
+        else -> findById(user.id)
+    }
 
     fun findById(id: String) : Mono<User>
         = dao.findById(id)

@@ -31,8 +31,7 @@ class UserController(
 
     @GetMapping
     @JsonView(UserView.PublicProfile::class)
-    private fun getAll()
-        = service.findAll()
+    private fun getAll() = service.findAll()
         .map { UserView.from(it) }
 
     @GetMapping("/{userId}")
