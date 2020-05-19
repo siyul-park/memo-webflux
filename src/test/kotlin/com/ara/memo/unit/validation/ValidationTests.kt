@@ -13,9 +13,8 @@ class ValidationTests @Autowired constructor(
     @Test
     fun testValidate() {
         val validationTester = ValidateObjectMocker(null, 10)
-
         val result = validator.validate(validationTester)
-
+        
         assertEquals(result?.isEmpty(), false)
     }
 }

@@ -13,7 +13,6 @@ class ReactiveValidationTests @Autowired constructor(
     @Test
     fun testValidate() {
         val validationTester = ValidateObjectMocker(null, 10)
-
         val result = validator.validate(validationTester)
             .collectList()
             .block()
