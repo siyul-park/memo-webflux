@@ -1,4 +1,4 @@
-package com.ara.memo.dao.plugin
+package com.ara.memo.util.plugin
 
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

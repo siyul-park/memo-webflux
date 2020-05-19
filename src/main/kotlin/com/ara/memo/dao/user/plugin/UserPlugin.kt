@@ -1,5 +1,5 @@
 package com.ara.memo.dao.user.plugin
 
-import com.ara.memo.dao.plugin.Plugin
+import com.ara.memo.util.plugin.Plugin
 
 interface UserPlugin : Plugin

@@ -1,7 +1,7 @@
 package com.ara.memo.dao
 
-import com.ara.memo.dao.plugin.Plugin
 import com.ara.memo.entity.Entity
+import com.ara.memo.util.plugin.Plugin
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
 

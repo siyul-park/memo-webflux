@@ -1,6 +1,6 @@
-package com.ara.memo.dao.plugin
+package com.ara.memo.util.plugin
 
-import com.ara.memo.dao.mapper.ExceptionMapper
+import com.ara.memo.util.mapper.ExceptionMapper
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 

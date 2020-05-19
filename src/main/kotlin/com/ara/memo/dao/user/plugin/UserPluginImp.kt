@@ -1,8 +1,8 @@
 package com.ara.memo.dao.user.plugin
 
-import com.ara.memo.dao.plugin.PluginManager
 import com.ara.memo.dao.plugin.SpringExceptionMappingPlugin
-import com.ara.memo.dao.plugin.ScheduleSubscribePlugin
+import com.ara.memo.util.plugin.PluginManager
+import com.ara.memo.util.plugin.ScheduleSubscribePlugin
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

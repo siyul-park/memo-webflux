@@ -1,13 +1,15 @@
-package com.ara.memo.handler
+package com.ara.memo.handler.error
 
 import com.ara.memo.dto.error.ErrorView
+import com.ara.memo.entity.error.Error
+import com.ara.memo.util.mapper.ErrorMapper
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.autoconfigure.web.ResourceProperties
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler
+import org.springframework.boot.web.reactive.error.DefaultErrorAttributes
 import org.springframework.boot.web.reactive.error.ErrorAttributes
 import org.springframework.context.ApplicationContext
 import org.springframework.core.annotation.Order
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.codec.ServerCodecConfigurer
 import org.springframework.stereotype.Component
@@ -22,37 +24,30 @@ class ErrorWebExceptionHandler(
     resourceProperties: ResourceProperties,
     applicationContext: ApplicationContext,
     viewResolversProvider: ObjectProvider<List<ViewResolver>>,
-    serverCodecConfigurer: ServerCodecConfigurer
-) : AbstractErrorWebExceptionHandler(GlobalErrorAttributes(), resourceProperties, applicationContext) {
+    serverCodecConfigurer: ServerCodecConfigurer,
+    private val errorMapper: ErrorMapper
+) : AbstractErrorWebExceptionHandler(DefaultErrorAttributes(), resourceProperties, applicationContext) {
     init {
         setViewResolvers(viewResolversProvider.getIfAvailable { emptyList() })
         setMessageWriters(serverCodecConfigurer.writers)
         setMessageReaders(serverCodecConfigurer.readers)
     }
 
-    override fun getRoutingFunction(errorAttributes: ErrorAttributes): RouterFunction<ServerResponse?> {
-        return RouterFunctions.route(
-            RequestPredicates.all(), HandlerFunction { request: ServerRequest -> renderErrorResponse(request) })
-    }
+    override fun getRoutingFunction(errorAttributes: ErrorAttributes) = RouterFunctions.route(
+        RequestPredicates.all(), HandlerFunction { request -> renderErrorResponse(request) }
+    )
 
-    private fun renderErrorResponse(request: ServerRequest): Mono<ServerResponse?> {
-        val errorPropertiesMap = getErrorAttributes(request, false)
-        val status = errorPropertiesMap["status"] as Int
+    private fun renderErrorResponse(request: ServerRequest): Mono<ServerResponse> {
+        val errorAttributes = getErrorAttributes(request, false)
+        val status = errorAttributes["status"] as Int
+        val path = errorAttributes["path"] as String
 
         return ServerResponse.status(status)
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(
                 when (isServerError(status)) {
-                    true -> ErrorView(
-                        errorPropertiesMap["error"] as? String,
-                        errorPropertiesMap["path"] as? String,
-                        errorPropertiesMap["error"] as? String
-                    )
-                    false -> ErrorView(
-                        errorPropertiesMap["name"] as? String,
-                        errorPropertiesMap["path"] as? String,
-                        errorPropertiesMap["message"] as? String
-                    )
+                    true -> ErrorView(path, Error(errorAttributes["error"] as String))
+                    false -> ErrorView(path, errorMapper.map(getError(request)))
                 }
             ))
     }
