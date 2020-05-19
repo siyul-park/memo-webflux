@@ -12,8 +12,8 @@ class ReactiveValidationTests @Autowired constructor(
 ) : UnitTests() {
     @Test
     fun testValidate() {
-        val validationTester = ValidateObjectMocker(null, 10)
-        val result = validator.validate(validationTester)
+        val validateObjectMocker = ValidateObjectMocker(null, 10)
+        val result = validator.validate(validateObjectMocker)
             .collectList()
             .block()
 
