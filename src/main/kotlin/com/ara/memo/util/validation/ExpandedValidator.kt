@@ -12,10 +12,15 @@ class ExpandedValidator(
     private val validator: ReactiveValidator,
     private val constraintViolationMapper: ConstraintViolationMapper
 ) {
-    fun <T : Any> validate(source: T, vararg groups: KClass<*>): Mono<Unit> {
+    fun <T : Any> validate(source: T, vararg groups: KClass<*>): Mono<T> {
         return validator.validate(source, *groups)
             .map(constraintViolationMapper::map)
             .collectList()
-            .flatMap { Mono.error<Unit>(ValidationException(Errors.of(it))) }
+            .flatMap {
+                when (it.isEmpty()) {
+                    true -> Mono.just(source)
+                    false -> Mono.error(ValidationException(Errors.of(it)))
+                }
+            }
     }
 }
