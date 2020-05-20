@@ -1,7 +1,6 @@
 package com.ara.memo.handler.error
 
 import com.ara.memo.dto.error.ErrorView
-import com.ara.memo.entity.error.Error
 import com.ara.memo.util.mapper.ErrorMapper
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.autoconfigure.web.ResourceProperties
@@ -34,10 +33,10 @@ class ErrorWebExceptionHandler(
     }
 
     override fun getRoutingFunction(errorAttributes: ErrorAttributes) = RouterFunctions.route(
-        RequestPredicates.all(), HandlerFunction { request -> renderErrorResponse(request) }
+        RequestPredicates.all(), HandlerFunction { request -> handleErrorRequest(request) }
     )
 
-    private fun renderErrorResponse(request: ServerRequest): Mono<ServerResponse> {
+    private fun handleErrorRequest(request: ServerRequest): Mono<ServerResponse> {
         val errorAttributes = getErrorAttributes(request, false)
         val status = errorAttributes["status"] as Int
         val path = errorAttributes["path"] as String
@@ -46,8 +45,15 @@ class ErrorWebExceptionHandler(
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(
                 when (isServerError(status)) {
-                    true -> ErrorView(path, Error(errorAttributes["error"] as String))
-                    false -> ErrorView(path, errorMapper.map(getError(request)))
+                    true -> ErrorView(
+                        path,
+                        errorAttributes["error"] as String
+                    )
+                    false -> ErrorView(
+                        path,
+                        errorAttributes["error"] as String,
+                        errorMapper.map(getError(request))
+                    )
                 }
             ))
     }
