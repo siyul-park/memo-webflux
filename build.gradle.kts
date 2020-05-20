@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val springBootVersion = "2.2.7.RELEASE"
-val swaggerVersion = "3.0.0-SNAPSHOT"
+//val swaggerVersion = "3.0.0-SNAPSHOT"
 val jacksonVersion = "2.10.4"
 val h2Version = "0.8.3.RELEASE"
 
@@ -27,12 +27,12 @@ dependencies {
 //	implementation("org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:${springBootVersion}")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
-	
+
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 
-	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
-	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
-	implementation("io.springfox:springfox-spring-webflux:${swaggerVersion}")
+//	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
+//	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+//	implementation("io.springfox:springfox-spring-webflux:${swaggerVersion}")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

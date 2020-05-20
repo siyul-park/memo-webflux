@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono
 import kotlin.reflect.KClass
 
 @Component
-class ValidatorExpansion(
+class ExpandedValidator(
     private val validator: ReactiveValidator,
     private val constraintViolationMapper: ConstraintViolationMapper
 ) {
@@ -16,6 +16,6 @@ class ValidatorExpansion(
         return validator.validate(source, *groups)
             .map(constraintViolationMapper::map)
             .collectList()
-            .flatMap { Mono.error(ValidationException(Errors.of(it))) }
+            .flatMap { Mono.error<Unit>(ValidationException(Errors.of(it))) }
     }
 }
