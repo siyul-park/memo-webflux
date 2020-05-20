@@ -1,6 +1,8 @@
 package com.ara.memo.util.cache
 
 interface Cache<K : Any, V : Any> {
+    val size: Int
+
     fun get(key: K?): V?
     fun put(key: K?, value: V): V?
     fun clear()
