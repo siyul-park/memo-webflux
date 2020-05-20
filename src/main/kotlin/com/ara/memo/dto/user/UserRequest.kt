@@ -6,10 +6,10 @@ import javax.validation.constraints.NotNull
 
 data class UserRequest(
     @JsonView(UsernameScope::class)
-    @NotNull(groups = [UsernameNotNull::class])
+    @field:NotNull(groups = [UsernameNotNull::class])
     val username: String? = null,
     @JsonView(PasswordScope::class)
-    @NotNull(groups = [PasswordNotNull::class])
+    @field:NotNull(groups = [PasswordNotNull::class])
     val password: String? = null
 ) {
     interface Authorize : UsernameScope, UsernameNotNull, PasswordScope, PasswordNotNull

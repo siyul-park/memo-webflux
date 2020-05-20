@@ -1,5 +1,5 @@
 package com.ara.memo.util.error
 
 class MultipleError(
-    errors: Collection<Error>
-) : Error, Collection<Error> by errors
+    errors: Collection<SingleError>
+) : Error, Collection<SingleError> by errors

@@ -1,6 +1,7 @@
 package com.ara.memo.handler.error
 
-import com.ara.memo.dto.error.ErrorView
+import com.ara.memo.dto.error.factory.ErrorViews
+import com.ara.memo.util.error.SingleError
 import com.ara.memo.util.mapper.ErrorMapper
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.autoconfigure.web.ResourceProperties
@@ -45,11 +46,12 @@ class ErrorWebExceptionHandler(
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(
                 when (isServerError(status)) {
-                    true -> ErrorView(
+                    true -> ErrorViews.of(
                         path,
-                        errorAttributes["error"] as String
+                        errorAttributes["error"] as String,
+                        null as SingleError?
                     )
-                    false -> ErrorView(
+                    false -> ErrorViews.of(
                         path,
                         errorAttributes["error"] as String,
                         errorMapper.map(getError(request))
