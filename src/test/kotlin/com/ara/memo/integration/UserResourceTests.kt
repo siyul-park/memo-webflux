@@ -32,7 +32,7 @@ class UserResourceTests : IntegrationTests("/users") {
         .responseBody!!
 
     private fun createSuccess(user: UserView) = create(user)
-        .expectStatus().isOk
+        .expectStatus().isCreated
         .expectBody(UserView::class.java)
         .returnResult()
         .responseBody!!

@@ -4,6 +4,7 @@ val springBootVersion = "2.2.7.RELEASE"
 //val swaggerVersion = "3.0.0-SNAPSHOT"
 val jacksonVersion = "2.10.4"
 val h2Version = "0.8.3.RELEASE"
+val r2dbcVersion = "1.1.0.RELEASE"
 
 plugins {
 	id("org.springframework.boot") version "2.2.7.RELEASE"
@@ -24,7 +25,7 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${springBootVersion}")
-//	implementation("org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:${springBootVersion}")
+	runtimeOnly("org.springframework.data:spring-data-r2dbc:${r2dbcVersion}")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
 
@@ -42,7 +43,7 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	testImplementation("io.projectreactor:reactor-test")
-//	runtimeOnly("io.r2dbc:r2dbc-h2:${h2Version}")
+	runtimeOnly("io.r2dbc:r2dbc-h2:${h2Version}")
 }
 tasks.withType<Test> {
 	useJUnitPlatform()
