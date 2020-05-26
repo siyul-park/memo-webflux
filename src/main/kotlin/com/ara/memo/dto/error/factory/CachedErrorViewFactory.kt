@@ -25,15 +25,12 @@ class CachedErrorViewFactory(
         else -> ErrorView(path, name, error)
     }
 
-    override fun of(path: String, name: String, error: SingleError?): SingleErrorView {
-        return singleErrorViewCache.getOrSet(ViewRequest(path, name, error)) {
-            SingleErrorView(path, name, error)
-        }
+    override fun of(path: String, name: String, error: SingleError?) = singleErrorViewCache.getOrSet(ViewRequest(path, name, error)) {
+        SingleErrorView(path, name, error)
     }
 
-    override fun of(path: String, name: String, error: MultipleError?): MultipleErrorView {
-        return multipleErrorViewCache.getOrSet(ViewRequest(path, name, error)) {
-            MultipleErrorView(path, name, error)
-        }
+
+    override fun of(path: String, name: String, error: MultipleError?) = multipleErrorViewCache.getOrSet(ViewRequest(path, name, error)) {
+        MultipleErrorView(path, name, error)
     }
 }
