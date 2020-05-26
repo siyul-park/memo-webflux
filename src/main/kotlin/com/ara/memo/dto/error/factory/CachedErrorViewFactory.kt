@@ -4,15 +4,14 @@ import com.ara.memo.dto.error.ErrorView
 import com.ara.memo.dto.error.MultipleErrorView
 import com.ara.memo.dto.error.SingleErrorView
 import com.ara.memo.util.cache.Cache
-import com.ara.memo.util.cache.WeakCache
 import com.ara.memo.util.cache.getOrSet
 import com.ara.memo.util.error.Error
 import com.ara.memo.util.error.MultipleError
 import com.ara.memo.util.error.SingleError
 
 class CachedErrorViewFactory(
-    private val singleErrorViewCache: Cache<ViewRequest, SingleErrorView> = WeakCache(),
-    private val multipleErrorViewCache: Cache<ViewRequest, MultipleErrorView> = WeakCache()
+    private val singleErrorViewCache: Cache<ViewRequest, SingleErrorView>,
+    private val multipleErrorViewCache: Cache<ViewRequest, MultipleErrorView>
 ) : ErrorViewFactory {
     data class ViewRequest(
         val path: String,

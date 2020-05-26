@@ -1,3 +1,5 @@
 package com.ara.memo.dto.error.factory
 
-object ErrorViews : ErrorViewFactory by CachedErrorViewFactory()
+import com.ara.memo.util.cache.WeakCache
+
+object ErrorViews : ErrorViewFactory by CachedErrorViewFactory(WeakCache(), WeakCache())
