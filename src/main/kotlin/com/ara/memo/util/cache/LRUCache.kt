@@ -4,10 +4,10 @@ class LRUCache<K : Any, V : Any>(
     private val delegate: Cache<K, V>,
     private val minimalSize: Int = DEFAULT_SIZE
 ) : Cache<K, V> {
-    private val keyMap = object : LinkedHashMap<Any, Any>(
+    private val keyMap = object : LinkedHashMap<Any, Boolean>(
         minimalSize, .75f, true
     ) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Any, Any>): Boolean {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Any, Boolean>): Boolean {
             val tooManyCachedItems = size > minimalSize
             if (tooManyCachedItems) eldestKeyToRemove = eldest.key
             return tooManyCachedItems
