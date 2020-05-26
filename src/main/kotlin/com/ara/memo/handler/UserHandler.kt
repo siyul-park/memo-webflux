@@ -4,7 +4,11 @@ import com.ara.memo.dto.user.UserRequest
 import com.ara.memo.dto.user.UserView
 import com.ara.memo.service.user.UserService
 import com.ara.memo.util.json.bodyWithJsonView
+import com.ara.memo.util.view.mapper.MappingInfo
+import com.ara.memo.util.view.mapper.RequestViewMapper
+import com.ara.memo.util.view.mapper.ResponseViewMapper
 import com.ara.memo.util.validation.ExpandedValidator
+import com.ara.memo.util.view.mapper.factory.ViewMappers
 import org.springframework.http.codec.json.Jackson2CodecSupport
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyInserters
@@ -19,21 +23,16 @@ class UserHandler(
     private val validator: ExpandedValidator,
     private val service: UserService
 ) {
-    fun create(request: ServerRequest) = getUserRequest(request, UserRequest.Create::class)
+    private val createUserRequestMappingInfo = MappingInfo(UserRequest::class, UserRequest.Create::class)
+    private val publicUserProfileMappingInfo = MappingInfo(UserView::class, UserView.PublicProfile::class)
+
+    fun create(request: ServerRequest) = ViewMappers.createRequestViewMapper(createUserRequestMappingInfo)
+        .map(request)
+        .flatMap { validator.validate(it, UserRequest.Create::class) }
         .flatMap { service.create(it.toUser()) }
         .flatMap {
-            ServerResponse.created(URI.create("${request.uri()}/${it.id}"))
-                .bodyWithUserView(
-                    Mono.fromCallable { UserView.from(it) },
-                    UserView.PublicProfile::class
-                )
+            ViewMappers.createResponseViewMapper(publicUserProfileMappingInfo) {
+                ServerResponse.created(URI.create("${request.uri()}/${it.id}"))
+            }.map(Mono.fromCallable { UserView.from(it) })
         }
-
-    fun <T : Any> getUserRequest(request: ServerRequest, profile: KClass<T>) = request
-        .bodyWithJsonView(UserRequest::class, profile)
-        .flatMap { validator.validate(it, profile) }
-
-    fun <T : Any> ServerResponse.BodyBuilder.bodyWithUserView(value: Mono<UserView>, profile: KClass<T>) = this.hint(
-        Jackson2CodecSupport.JSON_VIEW_HINT, profile.java
-    ).body(BodyInserters.fromPublisher(value, UserView::class.java))
 }

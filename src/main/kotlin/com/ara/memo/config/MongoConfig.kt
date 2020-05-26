@@ -1,9 +1,10 @@
 package com.ara.memo.config
 
+import com.ara.memo.config.property.MongoProperty
 import com.mongodb.ConnectionString
 import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoClients
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -12,13 +13,13 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 
 @Configuration
-@Profile("development")
+@Profile("!test")
+@EnableConfigurationProperties(MongoProperty::class)
 @EnableReactiveMongoRepositories(basePackages = ["com.ara.memo"])
 class MongoConfig(
-    @Value("\${spring.data.mongodb.uri}") private val uri: String,
-    @Value("\${spring.data.mongodb.database}") private val database: String
+    private val property: MongoProperty
 ) : AbstractReactiveMongoConfiguration() {
-    override fun getDatabaseName() = database
+    override fun getDatabaseName() = property.database
 
     override fun reactiveMongoClient(): MongoClient = mongoClient()
 
@@ -26,5 +27,5 @@ class MongoConfig(
     override fun reactiveMongoTemplate() = ReactiveMongoTemplate(mongoClient(), databaseName)
 
     @Bean
-    fun mongoClient(): MongoClient = MongoClients.create(ConnectionString(uri))
+    fun mongoClient(): MongoClient = MongoClients.create(ConnectionString(property.uri))
 }

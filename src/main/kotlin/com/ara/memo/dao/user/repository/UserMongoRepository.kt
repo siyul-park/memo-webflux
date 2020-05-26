@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import reactor.core.publisher.Mono
 
-@Profile("development")
+@Profile("!test")
 interface UserMongoRepository : UserRepository, ReactiveMongoRepository<User, String> {
     override fun findByUsername(username: String): Mono<User>
 
