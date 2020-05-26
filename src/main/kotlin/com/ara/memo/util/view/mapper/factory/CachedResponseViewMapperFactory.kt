@@ -10,7 +10,6 @@ import org.springframework.web.reactive.function.server.ServerResponse
 class CachedResponseViewMapperFactory(
     private val cache: Cache<Pair<MappingInfo<*, *>, () -> ServerResponse.BodyBuilder>, ResponseViewMapper<*, *>> = WeakCache()
 ) : ResponseViewMapperFactory {
-
     override fun <V : Any, H : Any> create(
         mappingInfo: MappingInfo<V, H>,
         createServerResponseBodyBuilder: () -> ServerResponse.BodyBuilder
