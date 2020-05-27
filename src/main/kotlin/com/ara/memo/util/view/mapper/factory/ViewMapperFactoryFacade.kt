@@ -7,9 +7,9 @@ class ViewMapperFactoryFacade(
     private val requestViewMapperFactory: RequestViewMapperFactory,
     private val responseViewMapperFactory: ResponseViewMapperFactory
 ) : ViewMapperFactory {
-    override fun <V : Any, H : Any> createRequestViewMapper(mappingInfo: MappingInfo<V, H>) = requestViewMapperFactory.create(mappingInfo)
-    override fun <V : Any, H : Any> createResponseViewMapper(
+    override fun <V : Any, H : Any> requestViewMapper(mappingInfo: MappingInfo<V, H>) = requestViewMapperFactory.from(mappingInfo)
+    override fun <V : Any, H : Any> responseViewMapper(
         mappingInfo: MappingInfo<V, H>,
         createServerResponseBodyBuilder: () -> ServerResponse.BodyBuilder
-    ) = responseViewMapperFactory.create(mappingInfo, createServerResponseBodyBuilder)
+    ) = responseViewMapperFactory.of(mappingInfo, createServerResponseBodyBuilder)
 }

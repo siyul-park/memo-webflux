@@ -5,7 +5,7 @@ import com.ara.memo.util.view.mapper.ResponseViewMapper
 import org.springframework.web.reactive.function.server.ServerResponse
 
 interface ResponseViewMapperFactory {
-    fun <V: Any, H: Any> create(
+    fun <V : Any, H : Any> of(
         mappingInfo: MappingInfo<V, H>,
         createServerResponseBodyBuilder: () -> ServerResponse.BodyBuilder
     ): ResponseViewMapper<V, H>
