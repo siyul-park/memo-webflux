@@ -7,9 +7,9 @@ import com.ara.memo.util.error.MultipleError
 import com.ara.memo.util.error.SingleError
 
 class CachedErrorFactory(
-    private val singleErrorCache: Cache<String, SingleError>,
-    private val multipleErrorCache: Cache<Collection<Error>, MultipleError>
+    private val singleErrorCache: Cache<Any, SingleError>,
+    private val multipleErrorCache: Cache<Any, MultipleError>
 ) : ErrorFactory {
-    override fun from(message: String?) = singleErrorCache.getOrSet(message) { SingleError(message) }
-    override fun from(errors: Collection<SingleError>) = multipleErrorCache.getOrSet(errors) { MultipleError(errors) }
+    override fun from(message: String?) = singleErrorCache.getOrSet(message.hashCode()) { SingleError(message) }
+    override fun from(errors: Collection<SingleError>) = multipleErrorCache.getOrSet(errors.hashCode()) { MultipleError(errors) }
 }

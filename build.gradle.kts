@@ -6,6 +6,7 @@ val jacksonVersion = "2.10.4"
 val r2dbcVersion = "1.1.0.RELEASE"
 val r2dbcH2Version = "0.8.3.RELEASE"
 val h2Version = "1.4.200"
+val guavaVersion = "29.0-jre"
 
 plugins {
 	id("org.springframework.boot") version "2.2.7.RELEASE"
@@ -44,6 +45,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+	implementation("com.google.guava:guava:${guavaVersion}")
+	api("com.google.guava:guava:${guavaVersion}")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

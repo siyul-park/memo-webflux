@@ -10,8 +10,8 @@ import com.ara.memo.util.error.MultipleError
 import com.ara.memo.util.error.SingleError
 
 class CachedErrorViewFactory(
-    private val singleErrorViewCache: Cache<ViewRequest, SingleErrorView>,
-    private val multipleErrorViewCache: Cache<ViewRequest, MultipleErrorView>
+    private val singleErrorViewCache: Cache<Any, SingleErrorView>,
+    private val multipleErrorViewCache: Cache<Any, MultipleErrorView>
 ) : ErrorViewFactory {
     data class ViewRequest(
         val path: String,
@@ -25,12 +25,12 @@ class CachedErrorViewFactory(
         else -> ErrorView(path, name, error)
     }
 
-    override fun of(path: String, name: String, error: SingleError?) = singleErrorViewCache.getOrSet(ViewRequest(path, name, error)) {
+    override fun of(path: String, name: String, error: SingleError?) = singleErrorViewCache.getOrSet(ViewRequest(path, name, error).hashCode()) {
         SingleErrorView(path, name, error)
     }
 
 
-    override fun of(path: String, name: String, error: MultipleError?) = multipleErrorViewCache.getOrSet(ViewRequest(path, name, error)) {
+    override fun of(path: String, name: String, error: MultipleError?) = multipleErrorViewCache.getOrSet(ViewRequest(path, name, error).hashCode()) {
         MultipleErrorView(path, name, error)
     }
 }
