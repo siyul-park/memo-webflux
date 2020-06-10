@@ -1,5 +1,5 @@
 package com.ara.memo.util.error
 
-class SingleError(
+interface SingleError : Error {
     val message: String?
-) : Error
+}

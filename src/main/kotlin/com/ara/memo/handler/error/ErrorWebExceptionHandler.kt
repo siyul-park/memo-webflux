@@ -1,7 +1,6 @@
 package com.ara.memo.handler.error
 
 import com.ara.memo.dto.error.factory.ErrorViews
-import com.ara.memo.util.error.SingleError
 import com.ara.memo.util.mapper.ErrorMapper
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.autoconfigure.web.ResourceProperties
@@ -41,24 +40,16 @@ class ErrorWebExceptionHandler(
         val errorAttributes = getErrorAttributes(request, false)
         val status = errorAttributes["status"] as Int
         val path = errorAttributes["path"] as String
+        val error = errorMapper.map(getError(request))
 
         return ServerResponse.status(status)
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(
-                when (isServerError(status)) {
-                    true -> ErrorViews.of(
-                        path,
-                        errorAttributes["error"] as String,
-                        null as SingleError?
-                    )
-                    false -> ErrorViews.of(
-                        path,
-                        errorAttributes["error"] as String,
-                        errorMapper.map(getError(request))
-                    )
-                }
+                ErrorViews.of(
+                    path,
+                    errorAttributes["error"] as String,
+                    error
+                )
             ))
     }
-
-    private fun isServerError(status: Int) = status in 500..599
 }
