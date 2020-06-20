@@ -30,9 +30,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${springBootVersion}")
 
-	implementation("org.springframework.data:spring-data-r2dbc:${r2dbcVersion}")
-	implementation("io.r2dbc:r2dbc-h2:${r2dbcH2Version}")
-	implementation("com.h2database:h2:${h2Version}")
+//	implementation("org.springframework.data:spring-data-r2dbc:${r2dbcVersion}")
+//	implementation("io.r2dbc:r2dbc-h2:${r2dbcH2Version}")
+//	implementation("com.h2database:h2:${h2Version}")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
 
