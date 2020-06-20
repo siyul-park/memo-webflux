@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.BodyExtractors
 import org.springframework.web.reactive.function.server.ServerRequest
 import reactor.core.publisher.Mono
 
-class RequestViewMapper<V: Any, H: Any>(
+class RequestMapper<V : Any, H : Any>(
     private val mappingInfo: MappingInfo<V, H>
 ) : Mapper<ServerRequest, Mono<V>> {
     override fun map(source: ServerRequest) = source.body(

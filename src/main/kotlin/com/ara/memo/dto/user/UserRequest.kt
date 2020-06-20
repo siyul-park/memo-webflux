@@ -16,9 +16,6 @@ data class UserRequest(
     interface Create : UsernameScope, UsernameNotNull, PasswordScope, PasswordNotNull
     interface Modify : UsernameScope, PasswordScope
 
-    interface UsernameScope
-    interface PasswordScope
-
     interface UsernameNotNull
     interface PasswordNotNull
 

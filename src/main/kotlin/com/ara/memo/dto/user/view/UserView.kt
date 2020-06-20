@@ -1,5 +1,8 @@
-package com.ara.memo.dto.user
+package com.ara.memo.dto.user.view
 
+import com.ara.memo.dto.user.IdScope
+import com.ara.memo.dto.user.PasswordScope
+import com.ara.memo.dto.user.UsernameScope
 import com.ara.memo.entity.user.User
 import com.fasterxml.jackson.annotation.JsonView
 
@@ -13,11 +16,9 @@ data class UserView(
 ) {
     interface PublicProfile : IdScope, UsernameScope
 
-    interface IdScope
-    interface UsernameScope
-    interface PasswordScope
-
     companion object {
-        fun from(user: User) = with(user) { UserView(id, username, password) }
+        fun from(user: User) = with(user) {
+            UserView(id, username, password)
+        }
     }
 }

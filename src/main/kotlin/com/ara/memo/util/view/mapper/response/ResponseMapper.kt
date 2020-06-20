@@ -7,11 +7,15 @@ import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
 
-class ResponseViewMapper<V: Any, H: Any>(
+class ResponseMapper<V : Any, H : Any>(
     private val mappingInfo: MappingInfo<V, H>,
-    private val createServerResponseBodyBuilder: () -> ServerResponse.BodyBuilder
+    private val createServerResponseBodyBuilder: (source: V) -> ServerResponse.BodyBuilder
 ) : Mapper<Mono<V>, Mono<ServerResponse>> {
-    override fun map(source: Mono<V>) = createServerResponseBodyBuilder().hint(
-        Jackson2CodecSupport.JSON_VIEW_HINT, mappingInfo.hint.java
-    ).body(BodyInserters.fromPublisher(source, mappingInfo.view.java))
+    fun map(source: V) = map(Mono.just(source))
+
+    override fun map(source: Mono<V>) = source.flatMap {
+        createServerResponseBodyBuilder(it).hint(
+            Jackson2CodecSupport.JSON_VIEW_HINT, mappingInfo.hint.java
+        ).body(BodyInserters.fromPublisher(source, mappingInfo.view.java))
+    }
 }

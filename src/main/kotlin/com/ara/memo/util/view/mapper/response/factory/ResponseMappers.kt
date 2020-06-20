@@ -4,7 +4,7 @@ import com.ara.memo.util.cache.factory.Caches
 import com.google.common.cache.CacheBuilder
 import java.time.Duration
 
-object ResponseViewMappers : ResponseViewMapperFactory by CachedResponseViewMapperFactory(
+object ResponseMappers : ResponseMapperFactory by CachedResponseMapperFactory(
     Caches.from(
         CacheBuilder.newBuilder()
             .softValues()
