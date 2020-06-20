@@ -9,9 +9,9 @@ import reactor.core.publisher.Mono
 import reactor.core.scheduler.Scheduler
 
 @Component
-class UserPluginImp(
+class UserDaoPluginComponent(
     scheduler: Scheduler
-) : UserPlugin {
+) : UserDaoPlugin {
     private val pluginManager = PluginManager()
 
     init {
