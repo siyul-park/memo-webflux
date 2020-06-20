@@ -1,6 +1,5 @@
 package com.ara.memo.dao.user.exception
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.server.ResponseStatusException
+import com.ara.memo.exception.ForbiddenException
 
-class UserAlreadyExistException(message: String? = "User is already exist.") : ResponseStatusException(HttpStatus.FORBIDDEN, message)
+class UserAlreadyExistException(message: String? = "User is already exist.") : ForbiddenException(message)

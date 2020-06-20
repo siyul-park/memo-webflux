@@ -1,6 +1,6 @@
 package com.ara.memo.util.error
 
 class PrivateError(
-    override val message: String?,
-    val privateMessage: String?
+    val privateMessage: String?,
+    override val message: String?
 ) : SingleError

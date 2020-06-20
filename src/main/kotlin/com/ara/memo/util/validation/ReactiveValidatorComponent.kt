@@ -4,6 +4,6 @@ import org.springframework.stereotype.Component
 import javax.validation.Validator
 
 @Component
-class ReactiveValidatorImp(
+class ReactiveValidatorComponent(
     validator: Validator
 ) : ReactiveValidator by ReactiveValidatorAdapter(validator)

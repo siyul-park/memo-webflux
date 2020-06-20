@@ -1,5 +1,5 @@
 package com.ara.memo.util.error
 
-import java.util.*
+import com.ara.memo.util.provider.Provider
 
-interface ErrorProvider : ServiceLoader.Provider<Error>
+interface ErrorProvider<T : Error> : Provider<Error>

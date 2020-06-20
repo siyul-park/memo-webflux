@@ -1,8 +1,8 @@
 package com.ara.memo.util.error
 
-interface WrappedErrorProvider : ErrorProvider {
-    val error: Error
+interface WrappedErrorProvider<T : Error> : ErrorProvider<T> {
+    val error: T
 
     override fun get() = error
-    override fun type() = error.javaClass
+    override fun type() = error::class
 }
