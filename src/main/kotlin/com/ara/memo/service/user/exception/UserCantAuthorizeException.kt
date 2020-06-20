@@ -1,6 +1,5 @@
 package com.ara.memo.service.user.exception
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.server.ResponseStatusException
+import com.ara.memo.exception.ForbiddenException
 
-object UserCantAuthorizeException : ResponseStatusException(HttpStatus.FORBIDDEN, "User can't authorize.")
+object UserCantAuthorizeException : ForbiddenException("User can't authorize.")

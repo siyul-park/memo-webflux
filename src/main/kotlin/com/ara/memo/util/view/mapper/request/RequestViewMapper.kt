@@ -1,6 +1,7 @@
-package com.ara.memo.util.view.mapper
+package com.ara.memo.util.view.mapper.request
 
 import com.ara.memo.util.mapper.Mapper
+import com.ara.memo.util.view.mapper.MappingInfo
 import org.springframework.http.codec.json.Jackson2CodecSupport
 import org.springframework.web.reactive.function.BodyExtractors
 import org.springframework.web.reactive.function.server.ServerRequest

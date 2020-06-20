@@ -8,19 +8,17 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-class UserService(
-    private val dao: UserDao
-) {
-    fun authorize(user: User) : Mono<User>
-        = find(user).flatMap { when (it.password == user.password) {
+class UserService(private val dao: UserDao) {
+    fun authorize(user: User): Mono<User> = find(user).flatMap {
+        when (it.password == user.password) {
             true -> Mono.just(it)
             false -> Mono.error(UserCantAuthorizeException)
-        } }
+        }
+    }
 
-    fun create(user: User): Mono<User>
-        = dao.save(user)
+    fun create(user: User): Mono<User> = dao.save(user)
 
-    fun updateById(id: String, updater: User.() -> Unit) : Mono<User>
+    fun updateById(id: String, updater: User.() -> Unit): Mono<User>
         = findById(id)
         .flatMap { update(it, updater) }
 

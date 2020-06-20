@@ -1,11 +1,11 @@
-package com.ara.memo.util.view.mapper.factory
+package com.ara.memo.util.view.mapper.response.factory
 
 import com.ara.memo.util.view.mapper.MappingInfo
-import com.ara.memo.util.view.mapper.ResponseViewMapper
+import com.ara.memo.util.view.mapper.response.ResponseViewMapper
 import org.springframework.web.reactive.function.server.ServerResponse
 
 interface ResponseViewMapperFactory {
-    fun <V : Any, H : Any> of(
+    fun <V : Any, H : Any> from(
         mappingInfo: MappingInfo<V, H>,
         createServerResponseBodyBuilder: () -> ServerResponse.BodyBuilder
     ): ResponseViewMapper<V, H>

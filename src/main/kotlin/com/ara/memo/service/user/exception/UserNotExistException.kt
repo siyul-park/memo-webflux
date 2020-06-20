@@ -1,6 +1,5 @@
 package com.ara.memo.service.user.exception
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.server.ResponseStatusException
+import com.ara.memo.exception.NotFoundException
 
-object UserNotExistException : ResponseStatusException(HttpStatus.NOT_FOUND, "User is not exist.")
+object UserNotExistException : NotFoundException("User is not exist.")
