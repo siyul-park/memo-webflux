@@ -8,6 +8,9 @@ import reactor.core.publisher.Mono
 class ReactiveDaoAdapter<R: ReactiveCrudRepository<T, ID>, T: Entity<ID>, ID>(
     private val repository: R
 ) : ReactiveDao<T, ID> {
+    override fun <S : T> update(entity: S, updater: S.() -> Unit): Mono<S> = Mono.fromCallable { entity.apply(updater) }
+        .flatMap { save(it) }
+
     override fun <S : T> save(entity: S): Mono<S> = repository.save(entity)
 
     override fun <S : T> saveAll(entities: Iterable<S>) = repository.saveAll(entities)

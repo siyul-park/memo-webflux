@@ -7,13 +7,11 @@ import com.mongodb.reactivestreams.client.MongoClients
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 
 @Configuration
-@Profile("!test")
 @EnableConfigurationProperties(MongoProperty::class)
 @EnableReactiveMongoRepositories(basePackages = ["com.ara.memo"])
 class MongoConfig(

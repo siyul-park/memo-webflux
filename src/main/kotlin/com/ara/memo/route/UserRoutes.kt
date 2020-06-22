@@ -10,12 +10,8 @@ import org.springframework.web.reactive.function.server.router
 class UserRoutes(private val handler: UserHandler) {
     @Bean
     fun userRouter() = router {
-        (accept(APPLICATION_JSON) and path).nest {
+        (accept(APPLICATION_JSON) and PathDefinition.users).nest {
             POST("", handler::create)
         }
-    }
-
-    companion object {
-        const val path = "/users"
     }
 }

@@ -12,6 +12,9 @@ interface ReactiveDao<T: Entity<ID>, ID> {
 
     fun <S : T> saveAll(entityStream: Publisher<S>): Flux<S>
 
+    fun <S : T> update(entity: S, updater: S.() -> Unit): Mono<S> = Mono.fromCallable { entity.apply(updater) }
+        .flatMap { save(it) }
+
     fun findById(id: ID): Mono<T>
 
     fun findById(id: Publisher<ID>): Mono<T>
