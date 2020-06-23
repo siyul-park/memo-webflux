@@ -22,10 +22,13 @@ class UserHandler(
     private val patchFactory: PatchFactory
 ) {
     private val requestMappingInfoForCreate = MappingInfo(UserCreatePayload::class, Unit::class)
+
     // TODO View 지정이 재대로 안됨
     private val viewMappingInfoForPublic = MappingInfo(UserView::class, Unit::class)
 
     private val requestMapperForCreate = RequestMappers.from(requestMappingInfoForCreate)
+
+    // TODO 형식 동일하게 하기
     private val responseMapperForCreate = ResponseMappers.from(viewMappingInfoForPublic) {
         ServerResponse.created(uriFactory.create(PathDefinition.users, it.id))
     }
