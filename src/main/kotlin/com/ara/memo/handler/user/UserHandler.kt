@@ -40,6 +40,9 @@ class UserHandler(
         service.findAll().map { UserView.from(it) }
     )
 
+    fun deleteAll(request: ServerRequest) = service.deleteAll()
+        .flatMap { ServerResponse.noContent().build() }
+
     fun updateById(request: ServerRequest): Mono<ServerResponse> {
         val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
         val userId = pathVariableExtractor.extract("userId")
@@ -77,9 +80,6 @@ class UserHandler(
             service.findByUsername(username).map { UserView.from(it) }
         )
     }
-
-    fun deleteAll(request: ServerRequest) = service.deleteAll()
-        .flatMap { ServerResponse.noContent().build() }
 
     fun deleteById(request: ServerRequest): Mono<ServerResponse> {
         val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
