@@ -12,11 +12,13 @@ class UserRoutes(private val handler: UserHandler) {
     fun userRouter() = router {
         (accept(APPLICATION_JSON) and "/users").nest {
             POST("", handler::create)
-            PATCH("/{userId}", handler::updateById)
-            PATCH("/@{username}", handler::updateByName)
             GET("", handler::readAll)
+            PATCH("/@{username}", handler::updateByName)
+            PATCH("/{userId}", handler::updateById)
+            GET("/@{username}", handler::readByName)
             GET("/{userId}", handler::readById)
             DELETE("", handler::deleteAll)
+            DELETE("/@{username}", handler::deleteByName)
             DELETE("/{userId}", handler::deleteById)
         }
     }

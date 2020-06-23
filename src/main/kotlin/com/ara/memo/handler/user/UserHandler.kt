@@ -36,6 +36,10 @@ class UserHandler(
             )
         }
 
+    fun readAll(request: ServerRequest) = viewer.renderOkResponse(
+        service.findAll().map { UserView.from(it) }
+    )
+
     fun updateById(request: ServerRequest): Mono<ServerResponse> {
         val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
         val userId = pathVariableExtractor.extract("userId")
@@ -56,16 +60,21 @@ class UserHandler(
             .flatMap { viewer.renderOkResponse(Mono.fromCallable { UserView.from(it) }) }
     }
 
-    fun readAll(request: ServerRequest) = viewer.renderOkResponse(
-        service.findAll().map { UserView.from(it) }
-    )
-
     fun readById(request: ServerRequest): Mono<ServerResponse> {
         val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
         val userId = pathVariableExtractor.extract("userId")
 
         return viewer.renderOkResponse(
             service.findById(userId).map { UserView.from(it) }
+        )
+    }
+
+    fun readByName(request: ServerRequest): Mono<ServerResponse> {
+        val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
+        val username = pathVariableExtractor.extract("username")
+
+        return viewer.renderOkResponse(
+            service.findByUsername(username).map { UserView.from(it) }
         )
     }
 
@@ -77,6 +86,14 @@ class UserHandler(
         val userId = pathVariableExtractor.extract("userId")
 
         return service.deleteByIdWhenExist(userId)
+            .flatMap { viewer.renderNoContentResponse() }
+    }
+
+    fun deleteByName(request: ServerRequest): Mono<ServerResponse> {
+        val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
+        val username = pathVariableExtractor.extract("username")
+
+        return service.deleteByIdWhenExist(username)
             .flatMap { viewer.renderNoContentResponse() }
     }
 }

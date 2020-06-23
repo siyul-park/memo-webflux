@@ -1,6 +1,6 @@
 package com.ara.memo.util.server
 
-import com.ara.memo.util.json.JacksonViewHintPatch
+import com.ara.memo.util.jackson.JacksonViewHintPatch
 import org.reactivestreams.Publisher
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.server.ServerResponse
