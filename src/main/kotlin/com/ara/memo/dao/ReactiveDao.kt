@@ -12,8 +12,7 @@ interface ReactiveDao<T: Entity<ID>, ID> {
 
     fun <S : T> saveAll(entityStream: Publisher<S>): Flux<S>
 
-    fun <S : T> update(entity: S, updater: S.() -> Unit): Mono<S> = Mono.fromCallable { entity.apply(updater) }
-        .flatMap { save(it) }
+    fun <S : T> update(entity: S, updater: S.() -> Unit): Mono<S>
 
     fun findById(id: ID): Mono<T>
 
@@ -31,15 +30,15 @@ interface ReactiveDao<T: Entity<ID>, ID> {
 
     fun count(): Mono<Long>
 
-    fun deleteById(id: ID): Mono<Void>
+    fun deleteById(id: ID): Mono<Unit>
 
-    fun deleteById(id: Publisher<ID>): Mono<Void>
+    fun deleteById(id: Publisher<ID>): Mono<Unit>
 
-    fun delete(entity: T): Mono<Void>
+    fun delete(entity: T): Mono<Unit>
 
-    fun deleteAll(entities: Iterable<T>): Mono<Void>
+    fun deleteAll(entities: Iterable<T>): Mono<Unit>
 
-    fun deleteAll(entityStream: Publisher<out T>): Mono<Void>
+    fun deleteAll(entityStream: Publisher<out T>): Mono<Unit>
 
-    fun deleteAll(): Mono<Void>
+    fun deleteAll(): Mono<Unit>
 }

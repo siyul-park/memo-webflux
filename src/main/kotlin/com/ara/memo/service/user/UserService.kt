@@ -4,6 +4,7 @@ import com.ara.memo.dao.user.UserDao
 import com.ara.memo.entity.user.User
 import com.ara.memo.service.user.exception.UserCantAuthorizeException
 import com.ara.memo.service.user.exception.UserNotExistException
+import com.ara.memo.util.patch.Patch
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
@@ -18,20 +19,22 @@ class UserService(private val dao: UserDao) {
 
     fun create(user: User): Mono<User> = dao.save(user)
 
-    fun updateById(id: String, updater: User.() -> Unit): Mono<User>
-        = findById(id)
+    fun updateById(id: String, patch: Patch<User>) = updateById(id) { patch.apply(this) }
+
+    fun updateById(id: String, updater: User.() -> Unit) = findById(id)
         .flatMap { update(it, updater) }
 
-    fun update(user: User, updater: User.() -> Unit) : Mono<User>
-        = Mono.fromCallable { user.apply(updater) }
-        .flatMap { dao.save(it) }
+    fun update(user: User, patch: Patch<User>) = update(user) { patch.apply(this) }
 
-    fun deleteByIdWhenExist(id: String) : Mono<Unit>
-        = dao.existsById(id)
-        .flatMap { when (it) {
-            true -> dao.deleteById(id)
-            false -> Mono.error(UserNotExistException)
-        } }.map {  }
+    fun update(user: User, updater: User.() -> Unit) = dao.update(user, updater)
+
+    fun deleteByIdWhenExist(id: String) = dao.existsById(id)
+        .flatMap {
+            when (it) {
+                true -> dao.deleteById(id)
+                false -> Mono.error(UserNotExistException)
+            }
+        }
 
     fun existsById(id: String) = dao.existsById(id)
 
@@ -44,11 +47,9 @@ class UserService(private val dao: UserDao) {
         else -> findById(user.id)
     }
 
-    fun findById(id: String) : Mono<User>
-        = dao.findById(id)
+    fun findById(id: String) = dao.findById(id)
         .switchIfEmpty(Mono.error(UserNotExistException))
 
-    fun findByUsername(username: String) : Mono<User>
-        = dao.findByUsername(username)
+    fun findByUsername(username: String) = dao.findByUsername(username)
         .switchIfEmpty(Mono.error(UserNotExistException))
 }

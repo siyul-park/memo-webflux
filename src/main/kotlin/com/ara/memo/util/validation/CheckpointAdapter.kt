@@ -1,7 +1,7 @@
 package com.ara.memo.util.validation
 
 import com.ara.memo.util.error.factory.Errors
-import com.ara.memo.util.validation.exception.ValidationException
+import com.ara.memo.util.validation.exception.ValidationErrorProvider
 import com.ara.memo.util.validation.mapper.ConstraintViolationMapper
 import reactor.core.publisher.Mono
 import kotlin.reflect.KClass
@@ -17,7 +17,7 @@ class CheckpointAdapter(
             .flatMap {
                 when (it.isEmpty()) {
                     true -> Mono.just(source)
-                    false -> Mono.error(ValidationException(Errors.from(it)))
+                    false -> Mono.error(ValidationErrorProvider(Errors.from(it)))
                 }
             }
     }

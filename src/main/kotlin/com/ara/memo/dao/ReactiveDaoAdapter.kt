@@ -33,15 +33,15 @@ class ReactiveDaoAdapter<R: ReactiveCrudRepository<T, ID>, T: Entity<ID>, ID>(
 
     override fun count() = repository.count()
 
-    override fun deleteById(id: ID) = repository.deleteById(id)
+    override fun deleteById(id: ID) = repository.deleteById(id).map { }
 
-    override fun deleteById(id: Publisher<ID>) = repository.deleteById(id)
+    override fun deleteById(id: Publisher<ID>) = repository.deleteById(id).map { }
 
-    override fun delete(entity: T) = repository.delete(entity)
+    override fun delete(entity: T) = repository.delete(entity).map { }
 
-    override fun deleteAll(entities: Iterable<T>) = repository.deleteAll(entities)
+    override fun deleteAll(entities: Iterable<T>) = repository.deleteAll(entities).map { }
 
-    override fun deleteAll(entityStream: Publisher<out T>) = repository.deleteAll(entityStream)
+    override fun deleteAll(entityStream: Publisher<out T>) = repository.deleteAll(entityStream).map { }
 
-    override fun deleteAll() = repository.deleteAll()
+    override fun deleteAll() = repository.deleteAll().map { }
 }

@@ -5,12 +5,14 @@ import com.ara.memo.dto.user.UsernameScope
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonView
 import java.util.*
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.NotEmpty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class UserUpdatePayload(
     @JsonView(UsernameScope::class)
-    val username: Optional<@NotNull String>? = null,
+    @NotEmpty
+    val username: Optional<String>? = null,
     @JsonView(PasswordScope::class)
-    val password: Optional<@NotNull String>? = null
+    @NotEmpty
+    val password: Optional<String>? = null
 )

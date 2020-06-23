@@ -1,6 +1,6 @@
 package com.ara.memo.route
 
-import com.ara.memo.handler.UserHandler
+import com.ara.memo.handler.user.UserHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -12,6 +12,7 @@ class UserRoutes(private val handler: UserHandler) {
     fun userRouter() = router {
         (accept(APPLICATION_JSON) and PathDefinition.users).nest {
             POST("", handler::create)
+            PATCH("/{userId}", handler::update)
         }
     }
 }
