@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 class DefaultErrorMapper : ErrorMapper {
     override fun map(source: Throwable): Error = when (source) {
-        is ErrorProvider -> source.get()
+        is ErrorProvider<*> -> source.get()
         else -> Errors.from(source.message)
     }
 }

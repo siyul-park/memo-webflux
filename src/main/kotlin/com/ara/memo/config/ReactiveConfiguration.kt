@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration
 import reactor.core.scheduler.Schedulers
 
 @Configuration
-class ReactiveConfig {
+class ReactiveConfiguration {
     @Bean
     fun scheduler() = Schedulers.elastic()
 }

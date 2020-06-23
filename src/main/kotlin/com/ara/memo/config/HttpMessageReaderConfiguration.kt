@@ -8,7 +8,7 @@ import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.util.MimeType
 
 @Configuration
-class HttpMessageReaderConfig(
+class HttpMessageReaderConfiguration(
     private val objectMapper: ObjectMapper
 ) {
     @Bean

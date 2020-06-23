@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableConfigurationProperties(URIProperty::class)
-class URIConfig(
-    private val property: URIProperty
-) {
+class URIConfiguration(property: URIProperty) {
     val self = property.self
 }

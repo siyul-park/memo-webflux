@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Configuration
 @EnableConfigurationProperties(MongoProperty::class)
 @EnableReactiveMongoRepositories(basePackages = ["com.ara.memo"])
-class MongoConfig(
+class MongoConfiguration(
     private val property: MongoProperty
 ) : AbstractReactiveMongoConfiguration() {
     override fun getDatabaseName() = property.database

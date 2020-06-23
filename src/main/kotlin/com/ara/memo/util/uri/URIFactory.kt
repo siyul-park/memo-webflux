@@ -1,12 +1,12 @@
 package com.ara.memo.util.uri
 
-import com.ara.memo.config.URIConfig
+import com.ara.memo.config.URIConfiguration
 import org.springframework.stereotype.Component
 import java.net.URI
 
 @Component
 class URIFactory(
-    private val config: URIConfig
+    private val configuration: URIConfiguration
 ) {
-    fun <T> create(resource: String, id: T) = URI.create("${config.self}/${resource}/${id}")
+    fun <T> create(resource: String, id: T) = URI.create("${configuration.self}/${resource}/${id}")
 }

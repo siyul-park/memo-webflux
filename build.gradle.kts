@@ -7,6 +7,7 @@ val r2dbcVersion = "1.1.0.RELEASE"
 val r2dbcH2Version = "0.8.3.RELEASE"
 val h2Version = "1.4.200"
 val guavaVersion = "29.0-jre"
+val jsonPatchVersion = "1.13"
 
 plugins {
 	id("org.springframework.boot") version "2.2.7.RELEASE"
@@ -41,6 +42,8 @@ dependencies {
 //	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
 //	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
 //	implementation("io.springfox:springfox-spring-webflux:${swaggerVersion}")
+
+	implementation("com.github.java-json-tools:json-patch:${jsonPatchVersion}")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

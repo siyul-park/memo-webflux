@@ -1,8 +1,5 @@
-package com.ara.memo.dto.user.view
+package com.ara.memo.dto.user
 
-import com.ara.memo.dto.user.IdScope
-import com.ara.memo.dto.user.PasswordScope
-import com.ara.memo.dto.user.UsernameScope
 import com.ara.memo.entity.user.User
 import com.fasterxml.jackson.annotation.JsonView
 

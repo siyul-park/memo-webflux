@@ -1,7 +1,7 @@
 package com.ara.memo.integration
 
 import com.ara.memo.dto.error.MultipleErrorView
-import com.ara.memo.dto.user.view.UserView
+import com.ara.memo.dto.user.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.web.reactive.function.BodyInserters

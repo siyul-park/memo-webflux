@@ -10,10 +10,13 @@ import reactor.core.publisher.Mono
 class RequestMapper<V : Any, H : Any>(
     private val mappingInfo: MappingInfo<V, H>
 ) : Mapper<ServerRequest, Mono<V>> {
-    override fun map(source: ServerRequest) = source.body(
-        BodyExtractors.toMono(mappingInfo.view.java),
-        mapOf(
-            Jackson2CodecSupport.JSON_VIEW_HINT to mappingInfo.hint.java
+    override fun map(source: ServerRequest): Mono<V> = when (mappingInfo.hint == Unit::class) {
+        true -> source.body(BodyExtractors.toMono(mappingInfo.view.java))
+        false -> source.body(
+            BodyExtractors.toMono(mappingInfo.view.java),
+            mapOf(
+                Jackson2CodecSupport.JSON_VIEW_HINT to mappingInfo.hint.java
+            )
         )
-    )
+    }
 }

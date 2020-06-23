@@ -1,9 +1,10 @@
 package com.ara.memo.handler
 
-import com.ara.memo.dto.user.UserRequest
-import com.ara.memo.dto.user.view.UserView
+import com.ara.memo.dto.user.UserView
+import com.ara.memo.dto.user.payload.UserCreatePayload
 import com.ara.memo.route.PathDefinition
 import com.ara.memo.service.user.UserService
+import com.ara.memo.util.patch.PatchFactory
 import com.ara.memo.util.uri.URIFactory
 import com.ara.memo.util.validation.Checkpoint
 import com.ara.memo.util.view.mapper.MappingInfo
@@ -17,10 +18,12 @@ import org.springframework.web.reactive.function.server.ServerResponse
 class UserHandler(
     private val service: UserService,
     private val checkpoint: Checkpoint,
-    private val uriFactory: URIFactory
+    private val uriFactory: URIFactory,
+    private val patchFactory: PatchFactory
 ) {
-    private val requestMappingInfoForCreate = MappingInfo(UserRequest::class, UserRequest.Create::class)
-    private val viewMappingInfoForPublic = MappingInfo(UserView::class, UserView.PublicProfile::class)
+    private val requestMappingInfoForCreate = MappingInfo(UserCreatePayload::class, Unit::class)
+    // TODO View 지정이 재대로 안됨
+    private val viewMappingInfoForPublic = MappingInfo(UserView::class, Unit::class)
 
     private val requestMapperForCreate = RequestMappers.from(requestMappingInfoForCreate)
     private val responseMapperForCreate = ResponseMappers.from(viewMappingInfoForPublic) {
@@ -28,7 +31,7 @@ class UserHandler(
     }
 
     fun create(request: ServerRequest) = requestMapperForCreate.map(request)
-        .flatMap { checkpoint.validate(it, UserRequest.Create::class) }
+        .flatMap { checkpoint.validate(it) }
         .flatMap { service.create(it.toUser()) }
         .flatMap { responseMapperForCreate.map(UserView.from(it)) }
 }

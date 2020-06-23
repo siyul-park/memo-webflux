@@ -13,9 +13,12 @@ class ResponseMapper<V : Any, H : Any>(
 ) : Mapper<Mono<V>, Mono<ServerResponse>> {
     fun map(source: V) = map(Mono.just(source))
 
-    override fun map(source: Mono<V>) = source.flatMap {
-        createServerResponseBodyBuilder(it).hint(
-            Jackson2CodecSupport.JSON_VIEW_HINT, mappingInfo.hint.java
-        ).body(BodyInserters.fromPublisher(source, mappingInfo.view.java))
-    }
+    override fun map(source: Mono<V>) = source.map {
+        createServerResponseBodyBuilder(it)
+    }.map {
+        when (mappingInfo.hint != Unit::class) {
+            true -> it.hint(Jackson2CodecSupport.JSON_VIEW_HINT, mappingInfo.hint.java)
+            false -> it
+        }
+    }.flatMap { it.body(BodyInserters.fromPublisher(source, mappingInfo.view.java)) }
 }
