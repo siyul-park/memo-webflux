@@ -24,9 +24,16 @@ class UserService(private val dao: UserDao) {
     fun updateById(id: String, updater: User.() -> Unit) = findById(id)
         .flatMap { update(it, updater) }
 
+    fun updateByUsername(username: String, patch: Patch<User>) = updateByUsername(username) { patch.apply(this) }
+
+    fun updateByUsername(username: String, updater: User.() -> Unit) = findByUsername(username)
+        .flatMap { update(it, updater) }
+
     fun update(user: User, patch: Patch<User>) = update(user) { patch.apply(this) }
 
     fun update(user: User, updater: User.() -> Unit) = dao.update(user, updater)
+
+    fun deleteAll() = dao.deleteAll()
 
     fun deleteByIdWhenExist(id: String) = dao.existsById(id)
         .flatMap {
@@ -35,8 +42,6 @@ class UserService(private val dao: UserDao) {
                 false -> Mono.error(UserNotExistException)
             }
         }
-
-    fun existsById(id: String) = dao.existsById(id)
 
     fun deleteById(id: String) = dao.deleteById(id)
 
@@ -52,4 +57,6 @@ class UserService(private val dao: UserDao) {
 
     fun findByUsername(username: String) = dao.findByUsername(username)
         .switchIfEmpty(Mono.error(UserNotExistException))
+
+    fun existsById(id: String) = dao.existsById(id)
 }

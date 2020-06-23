@@ -10,9 +10,14 @@ import org.springframework.web.reactive.function.server.router
 class UserRoutes(private val handler: UserHandler) {
     @Bean
     fun userRouter() = router {
-        (accept(APPLICATION_JSON) and PathDefinition.users).nest {
+        (accept(APPLICATION_JSON) and "/users").nest {
             POST("", handler::create)
-            PATCH("/{userId}", handler::update)
+            PATCH("/{userId}", handler::updateById)
+            PATCH("/@{username}", handler::updateByName)
+            GET("", handler::readAll)
+            GET("/{userId}", handler::readById)
+            DELETE("", handler::deleteAll)
+            DELETE("/{userId}", handler::deleteById)
         }
     }
 }

@@ -4,56 +4,79 @@ import com.ara.memo.dto.user.UserView
 import com.ara.memo.dto.user.payload.UserCreatePayload
 import com.ara.memo.dto.user.payload.UserUpdatePayload
 import com.ara.memo.entity.user.User
-import com.ara.memo.route.PathDefinition
 import com.ara.memo.service.user.UserService
 import com.ara.memo.util.patch.PatchFactory
-import com.ara.memo.util.uri.URIFactory
+import com.ara.memo.util.server.Viewer
+import com.ara.memo.util.server.bodyToMono
 import com.ara.memo.util.validation.Checkpoint
 import com.ara.memo.util.value.mapper.ValueMappers
 import com.ara.memo.util.value.path.PathVariableExtractor
-import com.ara.memo.util.view.mapper.MappingInfo
-import com.ara.memo.util.view.mapper.request.factory.RequestMappers
-import com.ara.memo.util.view.mapper.response.factory.ResponseMappers
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
+import java.net.URI
 
 @Component
 class UserHandler(
     private val service: UserService,
     private val checkpoint: Checkpoint,
-    private val uriFactory: URIFactory,
     private val patchFactory: PatchFactory,
     private val valueMappers: ValueMappers
 ) {
-    private val requestMappingInfoForCreate = MappingInfo.from(UserCreatePayload::class)
-    private val requestMappingInfoForUpdate = MappingInfo.from(UserUpdatePayload::class)
+    private val viewer = Viewer(UserView::class, UserView.PublicProfile::class)
 
-    private val viewMappingInfoForPublic = MappingInfo.of(UserView::class, UserView.PublicProfile::class)
-
-    private val requestMapperForCreate = RequestMappers.from(requestMappingInfoForCreate)
-    private val responseMapperForCreate = ResponseMappers.from(viewMappingInfoForPublic) {
-        ServerResponse.created(uriFactory.create(PathDefinition.users, it.id))
-    }
-
-    private val requestMapperForUpdate = RequestMappers.from(requestMappingInfoForUpdate)
-    private val responseMapperForUpdate = ResponseMappers.from(viewMappingInfoForPublic) {
-        ServerResponse.ok()
-    }
-
-    fun create(request: ServerRequest) = requestMapperForCreate.map(request)
+    fun create(request: ServerRequest) = request.bodyToMono(UserCreatePayload::class)
         .flatMap { checkpoint.validate(it) }
         .flatMap { service.create(it.toUser()) }
-        .flatMap { responseMapperForCreate.map(UserView.from(it)) }
+        .flatMap {
+            viewer.renderCreatedResponse(
+                Mono.fromCallable { UserView.from(it) },
+                URI.create("${request.uri()}/${it.id}")
+            )
+        }
 
-    fun update(request: ServerRequest): Mono<ServerResponse> {
+    fun updateById(request: ServerRequest): Mono<ServerResponse> {
         val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
         val userId = pathVariableExtractor.extract("userId")
 
-        return requestMapperForUpdate.map(request)
+        return request.bodyToMono(UserUpdatePayload::class)
             .flatMap { checkpoint.validate(it) }
             .flatMap { service.updateById(userId, patchFactory.create(it, User::class)) }
-            .flatMap { responseMapperForUpdate.map(UserView.from(it)) }
+            .flatMap { viewer.renderOkResponse(Mono.fromCallable { UserView.from(it) }) }
+    }
+
+    fun updateByName(request: ServerRequest): Mono<ServerResponse> {
+        val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
+        val username = pathVariableExtractor.extract("username")
+
+        return request.bodyToMono(UserUpdatePayload::class)
+            .flatMap { checkpoint.validate(it) }
+            .flatMap { service.updateByUsername(username, patchFactory.create(it, User::class)) }
+            .flatMap { viewer.renderOkResponse(Mono.fromCallable { UserView.from(it) }) }
+    }
+
+    fun readAll(request: ServerRequest) = viewer.renderOkResponse(
+        service.findAll().map { UserView.from(it) }
+    )
+
+    fun readById(request: ServerRequest): Mono<ServerResponse> {
+        val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
+        val userId = pathVariableExtractor.extract("userId")
+
+        return viewer.renderOkResponse(
+            service.findById(userId).map { UserView.from(it) }
+        )
+    }
+
+    fun deleteAll(request: ServerRequest) = service.deleteAll()
+        .flatMap { ServerResponse.noContent().build() }
+
+    fun deleteById(request: ServerRequest): Mono<ServerResponse> {
+        val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
+        val userId = pathVariableExtractor.extract("userId")
+
+        return service.deleteByIdWhenExist(userId)
+            .flatMap { viewer.renderNoContentResponse() }
     }
 }
