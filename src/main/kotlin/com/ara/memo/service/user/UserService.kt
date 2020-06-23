@@ -43,7 +43,17 @@ class UserService(private val dao: UserDao) {
             }
         }
 
+    fun deleteByUsernameWhenExist(username: String) = dao.existsByUsername(username)
+        .flatMap {
+            when (it) {
+                true -> dao.deleteByUsername(username)
+                false -> Mono.error(UserNotExistException)
+            }
+        }
+
     fun deleteById(id: String) = dao.deleteById(id)
+
+    fun deleteByUsername(username: String) = dao.deleteByUsername(username)
 
     fun findAll() = dao.findAll()
 
@@ -59,4 +69,6 @@ class UserService(private val dao: UserDao) {
         .switchIfEmpty(Mono.error(UserNotExistException))
 
     fun existsById(id: String) = dao.existsById(id)
+
+    fun existsByUsername(username: String) = dao.existsByUsername(username)
 }

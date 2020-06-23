@@ -93,7 +93,7 @@ class UserHandler(
         val pathVariableExtractor = PathVariableExtractor(request.pathVariables(), valueMappers)
         val username = pathVariableExtractor.extract("username")
 
-        return service.deleteByIdWhenExist(username)
+        return service.deleteByUsernameWhenExist(username)
             .flatMap { viewer.renderNoContentResponse() }
     }
 }

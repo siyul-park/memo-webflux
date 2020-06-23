@@ -9,16 +9,16 @@ import com.ara.memo.entity.user.User
 import org.springframework.stereotype.Repository
 
 @Repository
-class UserDaoImp(
+class UserDaoAdapter(
     private val repository: UserRepository,
     private val plugin: UserDaoPlugin
-): UserDao, ReactiveDao<User, String> by AppliedReactiveDao(
+) : UserDao, ReactiveDao<User, String> by AppliedReactiveDao(
     ReactiveDaoAdapter(repository),
     plugin
 ) {
-    override fun findByUsername(username: String)
-        = plugin.apply(repository.findByUsername(username))
+    override fun findByUsername(username: String) = plugin.apply(repository.findByUsername(username))
 
-    override fun existsByUsername(username: String)
-        = plugin.apply(repository.existsByUsername(username))
+    override fun existsByUsername(username: String) = plugin.apply(repository.existsByUsername(username))
+
+    override fun deleteByUsername(username: String) = plugin.apply(repository.deleteByUsername(username)).map { }
 }
