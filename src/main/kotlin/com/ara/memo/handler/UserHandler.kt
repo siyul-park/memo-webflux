@@ -24,7 +24,7 @@ class UserHandler(
     private val requestMappingInfoForCreate = MappingInfo(UserCreatePayload::class, Unit::class)
 
     // TODO View 지정이 재대로 안됨
-    private val viewMappingInfoForPublic = MappingInfo(UserView::class, Unit::class)
+    private val viewMappingInfoForPublic = MappingInfo(UserView::class, UserView.PublicProfile::class)
 
     private val requestMapperForCreate = RequestMappers.from(requestMappingInfoForCreate)
 
