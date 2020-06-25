@@ -2,21 +2,13 @@ package com.ara.memo.service.user
 
 import com.ara.memo.dao.user.UserDao
 import com.ara.memo.entity.user.User
-import com.ara.memo.service.user.exception.UserCantAuthorizeException
 import com.ara.memo.service.user.exception.UserNotExistException
 import com.ara.memo.util.patch.Patch
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-class UserService(private val dao: UserDao) {
-    fun authorize(user: User): Mono<User> = find(user).flatMap {
-        when (it.password == user.password) {
-            true -> Mono.just(it)
-            false -> Mono.error(UserCantAuthorizeException)
-        }
-    }
-
+class UserResource(private val dao: UserDao) {
     fun create(user: User): Mono<User> = dao.save(user)
 
     fun updateById(id: String, patch: Patch<User>) = updateById(id) { patch.apply(this) }

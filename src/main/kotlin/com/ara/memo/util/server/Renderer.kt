@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import java.net.URI
 import kotlin.reflect.KClass
 
-class Viewer<V : Any, H : Any>(
+class Renderer<V : Any, H : Any>(
     private val viewType: KClass<V>,
     viewHint: KClass<H>
 ) {
@@ -22,4 +22,9 @@ class Viewer<V : Any, H : Any>(
     ).body(BodyInserters.fromPublisher(view, viewType.java))
 
     fun renderNoContentResponse() = ServerResponse.noContent().build()
+
+    companion object {
+        fun <V : Any> from(viewType: KClass<V>) = Renderer(viewType, Unit::class)
+        fun <V : Any, H : Any> of(viewType: KClass<V>, viewHint: KClass<H>) = Renderer(viewType, viewHint)
+    }
 }
