@@ -13,13 +13,13 @@ class UserRoutes(private val handler: UserHandler) {
         (accept(APPLICATION_JSON) and "/users").nest {
             POST("", handler::create)
             GET("", handler::readAll)
-            DELETE("", handler::deleteAll)
-            PATCH("/@{username}", handler::updateByName)
+//            DELETE("", handler::deleteAll)
+//            PATCH("/@{username}", handler::updateByName)
             PATCH("/{userId}", handler::updateById)
-            GET("/@{username}", handler::readByName)
+//            GET("/@{username}", handler::readByName)
             GET("/{userId}", handler::readById)
-            DELETE("/@{username}", handler::deleteByName)
-            DELETE("/{userId}", handler::deleteById)
+//            DELETE("/@{username}", handler::deleteByName)
+//            DELETE("/{userId}", handler::deleteById)
         }
     }
 }
