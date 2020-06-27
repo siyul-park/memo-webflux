@@ -2,6 +2,7 @@ package com.ara.memo.dao
 
 import com.ara.memo.entity.Entity
 import com.ara.memo.util.plugin.Plugin
+import com.ara.memo.util.plugin.apply
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
 
@@ -9,39 +10,39 @@ class AppliedReactiveDao<R: ReactiveDao<T, ID>, T: Entity<ID>, ID>(
     private val dao: R,
     private val plugin: Plugin
 ) : ReactiveDao<T, ID> {
-    override fun <S : T> save(entity: S): Mono<S> = plugin.apply(dao.save(entity))
+    override fun <S : T> save(entity: S): Mono<S> = dao.save(entity).apply(plugin)
 
-    override fun <S : T> saveAll(entities: Iterable<S>) = plugin.apply(dao.saveAll(entities))
+    override fun <S : T> saveAll(entities: Iterable<S>) = dao.saveAll(entities).apply(plugin)
 
-    override fun <S : T> saveAll(entityStream: Publisher<S>) = plugin.apply(dao.saveAll(entityStream))
+    override fun <S : T> saveAll(entityStream: Publisher<S>) = dao.saveAll(entityStream).apply(plugin)
 
-    override fun <S : T> update(entity: S, updater: S.() -> Unit) = plugin.apply(dao.update(entity, updater))
+    override fun <S : T> update(entity: S, updater: S.() -> Unit) = dao.update(entity, updater).apply(plugin)
 
-    override fun findById(id: ID) = plugin.apply(dao.findById(id))
+    override fun findById(id: ID) = dao.findById(id).apply(plugin)
 
-    override fun findById(id: Publisher<ID>) = plugin.apply(dao.findById(id))
+    override fun findById(id: Publisher<ID>) = dao.findById(id).apply(plugin)
 
-    override fun existsById(id: ID) = plugin.apply(dao.existsById(id))
+    override fun existsById(id: ID) = dao.existsById(id).apply(plugin)
 
-    override fun existsById(id: Publisher<ID>) = plugin.apply(dao.existsById(id))
+    override fun existsById(id: Publisher<ID>) = dao.existsById(id).apply(plugin)
 
-    override fun findAll() = plugin.apply(dao.findAll())
+    override fun findAll() = dao.findAll().apply(plugin)
 
-    override fun findAllById(ids: Iterable<ID>) = plugin.apply(dao.findAllById(ids))
+    override fun findAllById(ids: Iterable<ID>) = dao.findAllById(ids).apply(plugin)
 
-    override fun findAllById(idStream: Publisher<ID>) = plugin.apply(dao.findAllById(idStream))
+    override fun findAllById(idStream: Publisher<ID>) = dao.findAllById(idStream).apply(plugin)
 
-    override fun count() = plugin.apply(dao.count())
+    override fun count() = dao.count().apply(plugin)
 
-    override fun deleteById(id: ID) = plugin.apply(dao.deleteById(id))
+    override fun deleteById(id: ID) = dao.deleteById(id).apply(plugin)
 
-    override fun deleteById(id: Publisher<ID>) = plugin.apply(dao.deleteById(id))
+    override fun deleteById(id: Publisher<ID>) = dao.deleteById(id).apply(plugin)
 
-    override fun delete(entity: T) = plugin.apply(dao.delete(entity))
+    override fun delete(entity: T) = dao.delete(entity).apply(plugin)
 
-    override fun deleteAll(entities: Iterable<T>) = plugin.apply(dao.deleteAll(entities))
+    override fun deleteAll(entities: Iterable<T>) = dao.deleteAll(entities).apply(plugin)
 
-    override fun deleteAll(entityStream: Publisher<out T>) = plugin.apply(dao.deleteAll(entityStream))
+    override fun deleteAll(entityStream: Publisher<out T>) = dao.deleteAll(entityStream).apply(plugin)
 
-    override fun deleteAll() = plugin.apply(dao.deleteAll())
+    override fun deleteAll() = dao.deleteAll().apply(plugin)
 }

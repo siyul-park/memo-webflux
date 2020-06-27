@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono
 import javax.validation.Validator
 
 @Component
-class UpdateUserByIdHandler(
+class UpdateUserByNameHandler(
     private val resource: UserResource,
     private val patchFactory: PatchFactory,
     validator: Validator
@@ -25,10 +25,10 @@ class UpdateUserByIdHandler(
     private val validationPlugin = ValidationPlugin.of(validator)
 
     override fun handleRequest(request: ServerRequest): Mono<ServerResponse> {
-        val id = request.pathVariable("userId")
+        val username = request.pathVariable("username")
 
         return validateAndGetPatch(request)
-            .flatMap { resource.updateById(id, it) }
+            .flatMap { resource.updateByUsername(username, it) }
             .flatMap(this::createResponse)
     }
 
