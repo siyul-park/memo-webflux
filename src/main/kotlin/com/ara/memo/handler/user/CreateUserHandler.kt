@@ -3,7 +3,7 @@ package com.ara.memo.handler.user
 import com.ara.memo.dto.user.UserView
 import com.ara.memo.dto.user.payload.UserCreatePayload
 import com.ara.memo.entity.user.User
-import com.ara.memo.handler.ResourceHandler
+import com.ara.memo.handler.Handler
 import com.ara.memo.service.user.UserResource
 import com.ara.memo.util.plugin.apply
 import com.ara.memo.util.validation.ValidationPlugin
@@ -19,24 +19,24 @@ import javax.validation.Validator
 class CreateUserHandler(
     private val resource: UserResource,
     validator: Validator
-) : ResourceHandler<Mono<User>, Mono<User>>() {
+) : Handler {
     private val validationPlugin = ValidationPlugin.of(validator)
 
-    override fun getBody(request: ServerRequest): Mono<User> {
+    override fun handleRequest(request: ServerRequest): Mono<ServerResponse> {
+        return validateAndGetBody(request)
+            .flatMap(resource::create)
+            .flatMap { createResponse(it, request) }
+    }
+
+    private fun validateAndGetBody(request: ServerRequest): Mono<User> {
         return request.bodyToMono(UserCreatePayload::class.java)
             .apply(validationPlugin)
             .map(UserCreatePayload::toUser)
     }
 
-    override fun process(body: Mono<User>, request: ServerRequest): Mono<User> {
-        return body.flatMap(resource::create)
-    }
-
-    override fun render(resource: Mono<User>, request: ServerRequest): Mono<ServerResponse> {
-        return resource.flatMap {
-            ServerResponse.created(URI.create("${request.uri()}/${it.id}"))
-                .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class.java)
-                .bodyValue(UserView.from(it))
-        }
+    private fun createResponse(user: User, request: ServerRequest): Mono<ServerResponse> {
+        return ServerResponse.created(URI.create("${request.uri()}/${user.id}"))
+            .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class.java)
+            .bodyValue(UserView.from(user))
     }
 }
