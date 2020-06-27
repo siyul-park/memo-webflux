@@ -2,22 +2,16 @@ package com.ara.memo.service.user
 
 import com.ara.memo.dao.user.UserDao
 import com.ara.memo.entity.user.User
-import com.ara.memo.service.user.exception.UserCantAuthorizeException
 import com.ara.memo.service.user.exception.UserNotExistException
 import com.ara.memo.util.patch.Patch
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-class UserService(private val dao: UserDao) {
-    fun authorize(user: User): Mono<User> = find(user).flatMap {
-        when (it.password == user.password) {
-            true -> Mono.just(it)
-            false -> Mono.error(UserCantAuthorizeException)
-        }
-    }
+class UserResource(private val dao: UserDao) {
+    fun createAll(users: Iterable<User>) = dao.saveAll(users)
 
-    fun create(user: User): Mono<User> = dao.save(user)
+    fun create(user: User) = dao.save(user)
 
     fun updateById(id: String, patch: Patch<User>) = updateById(id) { patch.apply(this) }
 
@@ -35,7 +29,7 @@ class UserService(private val dao: UserDao) {
 
     fun deleteAll() = dao.deleteAll()
 
-    fun deleteByIdWhenExist(id: String) = dao.existsById(id)
+    fun deleteById(id: String) = dao.existsById(id)
         .flatMap {
             when (it) {
                 true -> dao.deleteById(id)
@@ -43,17 +37,13 @@ class UserService(private val dao: UserDao) {
             }
         }
 
-    fun deleteByUsernameWhenExist(username: String) = dao.existsByUsername(username)
+    fun deleteByUsername(username: String) = dao.existsByUsername(username)
         .flatMap {
             when (it) {
                 true -> dao.deleteByUsername(username)
                 false -> Mono.error(UserNotExistException)
             }
         }
-
-    fun deleteById(id: String) = dao.deleteById(id)
-
-    fun deleteByUsername(username: String) = dao.deleteByUsername(username)
 
     fun findAll() = dao.findAll()
 

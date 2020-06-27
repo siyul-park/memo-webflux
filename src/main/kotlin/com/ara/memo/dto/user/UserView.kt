@@ -7,9 +7,9 @@ data class UserView(
     @JsonView(IdScope::class)
     val id: String? = null,
     @JsonView(UsernameScope::class)
-    val username: String? = null,
+    val username: String,
     @JsonView(PasswordScope::class)
-    val password: String? = null
+    val password: String
 ) {
     interface PublicProfile : IdScope, UsernameScope
 
