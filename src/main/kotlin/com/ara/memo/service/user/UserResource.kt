@@ -9,7 +9,9 @@ import reactor.core.publisher.Mono
 
 @Service
 class UserResource(private val dao: UserDao) {
-    fun create(user: User): Mono<User> = dao.save(user)
+    fun createAll(users: Iterable<User>) = dao.saveAll(users)
+
+    fun create(user: User) = dao.save(user)
 
     fun updateById(id: String, patch: Patch<User>) = updateById(id) { patch.apply(this) }
 

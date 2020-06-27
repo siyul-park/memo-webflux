@@ -5,6 +5,7 @@ import org.springframework.web.reactive.function.server.ServerRequest
 
 @Component
 class UserHandlerFacade(
+    private val createUsersHandler: CreateUsersHandler,
     private val createUserHandler: CreateUserHandler,
     private val readUsersHandler: ReadUsersHandler,
     private val readUserByNameHandler: ReadUserByNameHandler,
@@ -15,6 +16,7 @@ class UserHandlerFacade(
     private val deleteUserByNameHandler: DeleteUserByNameHandler,
     private val deleteUserByIdHandler: DeleteUserByIdHandler
 ) {
+    fun createAll(request: ServerRequest) = createUsersHandler.handleRequest(request)
     fun create(request: ServerRequest) = createUserHandler.handleRequest(request)
 
     fun readAll(request: ServerRequest) = readUsersHandler.handleRequest(request)

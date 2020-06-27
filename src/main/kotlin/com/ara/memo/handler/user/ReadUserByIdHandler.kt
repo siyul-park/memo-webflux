@@ -18,12 +18,12 @@ class ReadUserByIdHandler(
         val userId = request.pathVariable("userId")
 
         return resource.findById(userId)
-            .flatMap(this::createResponse)
+            .flatMap { createResponse(it) }
     }
 
     private fun createResponse(user: User): Mono<ServerResponse> {
         return ServerResponse.ok()
-            .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class.java)
+            .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class)
             .bodyValue(UserView.from(user))
     }
 }
