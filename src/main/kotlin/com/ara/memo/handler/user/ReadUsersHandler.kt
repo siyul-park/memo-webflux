@@ -8,7 +8,6 @@ import org.springframework.http.codec.json.Jackson2CodecSupport
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.body
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -23,6 +22,6 @@ class ReadUsersHandler(
     private fun createResponse(users: Flux<User>): Mono<ServerResponse> {
         return ServerResponse.ok()
             .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class.java)
-            .body(users.map { UserView.from(it) })
+            .body(users.map { UserView.from(it) }, UserView::class.java)
     }
 }

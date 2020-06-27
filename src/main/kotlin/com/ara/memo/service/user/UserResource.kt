@@ -27,7 +27,7 @@ class UserResource(private val dao: UserDao) {
 
     fun deleteAll() = dao.deleteAll()
 
-    fun deleteByIdWhenExist(id: String) = dao.existsById(id)
+    fun deleteById(id: String) = dao.existsById(id)
         .flatMap {
             when (it) {
                 true -> dao.deleteById(id)
@@ -35,17 +35,13 @@ class UserResource(private val dao: UserDao) {
             }
         }
 
-    fun deleteByUsernameWhenExist(username: String) = dao.existsByUsername(username)
+    fun deleteByUsername(username: String) = dao.existsByUsername(username)
         .flatMap {
             when (it) {
                 true -> dao.deleteByUsername(username)
                 false -> Mono.error(UserNotExistException)
             }
         }
-
-    fun deleteById(id: String) = dao.deleteById(id)
-
-    fun deleteByUsername(username: String) = dao.deleteByUsername(username)
 
     fun findAll() = dao.findAll()
 
