@@ -7,6 +7,6 @@ import kotlin.reflect.KClass
 @Component
 class JsonPatchFactory(
     private val objectMapper: ObjectMapper
-) : PatchFactory {
-    override fun <O : Any, T : Any> create(overrides: O, type: KClass<T>) = JsonPatch<T>(overrides, objectMapper)
+) {
+    fun <O : Any, T : Any> create(overrides: O, type: KClass<T>) = JsonPatch<T>(overrides, objectMapper)
 }

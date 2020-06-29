@@ -4,8 +4,8 @@ import com.ara.memo.dto.user.UserView
 import com.ara.memo.dto.user.payload.UserUpdatePayload
 import com.ara.memo.entity.user.User
 import com.ara.memo.service.user.UserResource
+import com.ara.memo.util.patch.JsonPatchFactory
 import com.ara.memo.util.patch.Patch
-import com.ara.memo.util.patch.PatchFactory
 import com.ara.memo.util.plugin.apply
 import com.ara.memo.util.validation.ValidationPlugin
 import org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ import javax.validation.Validator
 @Component
 class UpdateUserByIdHandler(
     private val resource: UserResource,
-    private val patchFactory: PatchFactory,
+    private val patchFactory: JsonPatchFactory,
     validator: Validator
 ) : AbstractUpdateHandler() {
     private val validationPlugin = ValidationPlugin.of(validator)
