@@ -22,6 +22,8 @@ class ViewProjectionSerialization(
     }
 
     private fun removeFields(node: JsonNode, fields: Fields) {
+        if (fields.isEmpty()) return
+
         if (node is ObjectNode) {
             val deleteFields = mutableSetOf<String>()
             val remainFields = mutableSetOf<Field>()
