@@ -16,8 +16,6 @@ class AppliedReactiveDao<R: ReactiveDao<T, ID>, T: Entity<ID>, ID>(
 
     override fun <S : T> saveAll(entityStream: Publisher<S>) = dao.saveAll(entityStream).apply(plugin)
 
-    override fun <S : T> update(entity: S, updater: S.() -> Unit) = dao.update(entity, updater).apply(plugin)
-
     override fun findById(id: ID) = dao.findById(id).apply(plugin)
 
     override fun findById(id: Publisher<ID>) = dao.findById(id).apply(plugin)

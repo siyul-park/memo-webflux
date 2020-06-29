@@ -13,19 +13,11 @@ class UserResource(private val dao: UserDao) {
 
     fun create(user: User) = dao.save(user)
 
-    fun updateById(id: String, patch: Patch<User>) = updateById(id) { patch.apply(this) }
+    fun updateById(id: String, patch: Patch<User>) = findById(id).flatMap { update(it, patch) }
 
-    fun updateById(id: String, updater: User.() -> Unit) = findById(id)
-        .flatMap { update(it, updater) }
+    fun updateByUsername(username: String, patch: Patch<User>) = findByUsername(username).flatMap { update(it, patch) }
 
-    fun updateByUsername(username: String, patch: Patch<User>) = updateByUsername(username) { patch.apply(this) }
-
-    fun updateByUsername(username: String, updater: User.() -> Unit) = findByUsername(username)
-        .flatMap { update(it, updater) }
-
-    fun update(user: User, patch: Patch<User>) = update(user) { patch.apply(this) }
-
-    fun update(user: User, updater: User.() -> Unit) = dao.update(user, updater)
+    fun update(user: User, patch: Patch<User>) = Mono.fromCallable { patch.apply(user) }.flatMap { dao.save(it) }
 
     fun deleteAll() = dao.deleteAll()
 
