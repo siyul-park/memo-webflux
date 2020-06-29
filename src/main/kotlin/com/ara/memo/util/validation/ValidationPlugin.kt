@@ -25,7 +25,7 @@ class ValidationPlugin(
     private fun <T> validate(entity: T) {
         val violation = validator.validate(entity, *KotlinExtentions.convertToClass(clazz))
         val errors = violation.map(ConstraintViolationMapper::map)
-        throw ConstraintViolationError(Errors.from(errors))
+        if (errors.isNotEmpty()) throw ConstraintViolationError(Errors.from(errors))
     }
 
     companion object {
