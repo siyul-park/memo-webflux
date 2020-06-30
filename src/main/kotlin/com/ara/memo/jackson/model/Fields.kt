@@ -1,4 +1,4 @@
-package com.ara.memo.util.view
+package com.ara.memo.jackson.model
 
 import java.util.stream.Collectors
 

@@ -1,23 +1,15 @@
 package com.ara.memo.integration
 
-import com.ara.memo.dto.error.MultipleErrorView
-import com.ara.memo.dto.user.UserView
+import com.ara.memo.dto.user.payload.UserCreatePayload
+import com.ara.memo.dto.user.payload.UserResponsePayload
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.web.reactive.function.BodyInserters
 
 class UserResourceTests : IntegrationTests("/users") {
     @Test
-    fun testCreateFail() {
-        val request = UserView(username = null, password = "test")
-        val response = createFail(request)
-
-        assertNotNull(response.error)
-    }
-
-    @Test
     fun testCreateSuccess() {
-        val request = UserView(username = "test", password = "test")
+        val request = UserCreatePayload(username = "test", password = "test")
         val response = createSuccess(request)
 
         assertNotNull(response.id)
@@ -25,19 +17,13 @@ class UserResourceTests : IntegrationTests("/users") {
         assertNull(response.password)
     }
 
-    private fun createFail(user: UserView) = create(user)
-        .expectStatus().is4xxClientError
-        .expectBody(MultipleErrorView::class.java)
-        .returnResult()
-        .responseBody!!
-
-    private fun createSuccess(user: UserView) = create(user)
+    private fun createSuccess(user: UserCreatePayload) = create(user)
         .expectStatus().isCreated
-        .expectBody(UserView::class.java)
+        .expectBody(UserResponsePayload::class.java)
         .returnResult()
         .responseBody!!
 
-    private fun create(user: UserView) = webClient.post()
+    private fun create(user: UserCreatePayload) = webClient.post()
         .uri(linkUri())
         .body(BodyInserters.fromValue(user))
         .exchange()

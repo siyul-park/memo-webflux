@@ -1,8 +1,9 @@
 package com.ara.memo.handler.user
 
-import com.ara.memo.dto.user.UserView
+import com.ara.memo.dto.user.payload.UserResponsePayload
 import com.ara.memo.dto.user.payload.UserUpdatePayload
 import com.ara.memo.entity.user.User
+import com.ara.memo.jackson.model.JsonView
 import com.ara.memo.service.user.UserResource
 import com.ara.memo.util.patch.JsonPatchFactory
 import com.ara.memo.util.patch.Patch
@@ -27,7 +28,11 @@ class UpdateUserByNameHandler(
         val patch = validateAndGetPatch(request)
         val user = patch.flatMap { resource.updateByUsername(username, it) }
 
-        return createResponse(user.map { UserView.from(it) })
+        return createResponse(
+            user.map {
+                JsonView.of(UserResponsePayload.from(it), UserResponsePayload.PublicProfile::class)
+            }
+        )
     }
 
     private fun validateAndGetPatch(request: ServerRequest): Mono<Patch<User>> {

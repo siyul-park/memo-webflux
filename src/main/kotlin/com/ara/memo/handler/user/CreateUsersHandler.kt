@@ -1,7 +1,7 @@
 package com.ara.memo.handler.user
 
-import com.ara.memo.dto.user.UserView
 import com.ara.memo.dto.user.payload.UserCreatePayload
+import com.ara.memo.dto.user.payload.UserResponsePayload
 import com.ara.memo.entity.user.User
 import com.ara.memo.handler.Handler
 import com.ara.memo.service.user.UserResource
@@ -38,7 +38,7 @@ class CreateUsersHandler(
 
     private fun createResponse(users: Flux<User>): Mono<ServerResponse> {
         return ServerResponse.ok()
-            .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class.java)
-            .body(users.map { UserView.from(it) }, UserView::class.java)
+            .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserResponsePayload.PublicProfile::class.java)
+            .body(users.map { UserResponsePayload.from(it) }, UserResponsePayload::class.java)
     }
 }

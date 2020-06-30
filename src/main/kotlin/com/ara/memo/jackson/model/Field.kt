@@ -1,4 +1,4 @@
-package com.ara.memo.util.view
+package com.ara.memo.jackson.model
 
 class Field(
     val name: String,

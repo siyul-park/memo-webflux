@@ -1,8 +1,8 @@
 package com.ara.memo.jackson.serialization
 
-import com.ara.memo.util.view.Field
-import com.ara.memo.util.view.Fields
-import com.ara.memo.util.view.ViewProjection
+import com.ara.memo.jackson.model.Field
+import com.ara.memo.jackson.model.Fields
+import com.ara.memo.jackson.model.JsonProjection
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.JsonSerializer
@@ -12,10 +12,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.springframework.stereotype.Component
 
 @Component
-class ViewProjectionSerialization(
+class JsonProjectionSerializer(
     private val objectMapper: ObjectMapper
-) : JsonSerializer<ViewProjection<*>>() {
-    override fun serialize(value: ViewProjection<*>, gen: JsonGenerator, serializers: SerializerProvider) {
+) : JsonSerializer<JsonProjection<*>>() {
+    override fun serialize(value: JsonProjection<*>, gen: JsonGenerator, serializers: SerializerProvider) {
         val jsonNode = objectMapper.readTree(objectMapper.writeValueAsString(value.view))
         removeFields(jsonNode, value.fields)
         gen.writeObject(jsonNode)
