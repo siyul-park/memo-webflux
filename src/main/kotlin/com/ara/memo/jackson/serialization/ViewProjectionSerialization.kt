@@ -17,11 +17,11 @@ class ViewProjectionSerialization(
 ) : JsonSerializer<ViewProjection<*>>() {
     override fun serialize(value: ViewProjection<*>, gen: JsonGenerator, serializers: SerializerProvider) {
         val jsonNode = objectMapper.readTree(objectMapper.writeValueAsString(value.view))
-        removeFields(jsonNode, value.fields)
+        projectFields(jsonNode, value.fields)
         gen.writeObject(jsonNode)
     }
 
-    private fun removeFields(node: JsonNode, fields: Fields) {
+    private fun projectFields(node: JsonNode, fields: Fields) {
         if (fields.isEmpty()) return
 
         if (node is ObjectNode) {
@@ -33,9 +33,9 @@ class ViewProjectionSerialization(
                 else remainFields.add(localFields)
             }
             deleteFields.forEach { node.remove(it) }
-            remainFields.forEach { removeFields(node[it.name], it.children) }
+            remainFields.forEach { projectFields(node[it.name], it.children) }
         } else {
-            node.forEach { removeFields(it, fields) }
+            node.forEach { projectFields(it, fields) }
         }
     }
 }
