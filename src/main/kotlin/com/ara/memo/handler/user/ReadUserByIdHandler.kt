@@ -18,7 +18,7 @@ class ReadUserByIdHandler(
         val user = resource.findById(userId)
         return createResponse(
             user.map { UserView.from(it) }
-                .map { ViewProjection.of(it, fields, UserView.PublicProfile::class) }
+                .map { ViewProjection.of(it, fields) }
         )
     }
 }

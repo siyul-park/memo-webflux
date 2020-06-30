@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 abstract class AbstractUpdateHandler : Handler {
     protected fun createResponse(userView: Publisher<UserView>): Mono<ServerResponse> {
         return ServerResponse.ok()
-            .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class)
+            .hint(Jackson2CodecSupport.JSON_VIEW_HINT, UserView.PublicProfile::class.java)
             .body(userView, UserView::class.java)
     }
 }

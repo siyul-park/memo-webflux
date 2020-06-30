@@ -27,11 +27,14 @@ class ViewProjectionSerialization(
         if (node is ObjectNode) {
             val deleteFields = mutableSetOf<String>()
             val remainFields = mutableSetOf<Field>()
+
             node.fieldNames().forEach {
                 val localFields = fields[it]
+
                 if (localFields == null) deleteFields.add(it)
                 else remainFields.add(localFields)
             }
+
             deleteFields.forEach { node.remove(it) }
             remainFields.forEach { projectFields(node[it.name], it.children) }
         } else {

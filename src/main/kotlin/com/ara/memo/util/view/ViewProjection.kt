@@ -7,11 +7,11 @@ data class ViewProjection<T : Any>(
     val fields: Fields
 ) {
     companion object {
-        fun <T : Any> of(view: View<T>, fields: Collection<String>): ViewProjection<View<T>> {
+        fun <T : Any> of(view: T, fields: Collection<String>): ViewProjection<T> {
             return ViewProjection(view, Fields.from(fields))
         }
 
-        fun <T : Any> of(value: T, fields: Collection<String>, view: KClass<*>? = null): ViewProjection<View<T>> {
+        fun <T : Any> of(value: T, fields: Collection<String>, view: KClass<*>?): ViewProjection<View<T>> {
             return ViewProjection(View.of(value, view), Fields.from(fields))
         }
     }
